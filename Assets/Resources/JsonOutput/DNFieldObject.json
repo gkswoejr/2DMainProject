@@ -37,5 +37,18 @@
     "DropItemDataId": "Item_Potato_1",
     "IconPath": null,
     "PrefabPath": "2DPrefab/Harvest_Potato"
+  },
+  {
+    "Id": "harv_pizza_1",
+    "FieldObjectType": "Harvest",
+    "Name": "피자",
+    "Description": "파인애플이 올려진 피자",
+    "DropCountRange": [
+      10,
+      100
+    ],
+    "DropItemDataId": "Item_Pizza_1",
+    "IconPath": null,
+    "PrefabPath": "2DPrefab/Harvest_Corn"
   }
 ]

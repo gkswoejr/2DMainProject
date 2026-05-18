@@ -48,5 +48,15 @@
     "MaxStackCount": 20,
     "SellingPrice": 100,
     "IconPath": "Icon/Icon_Item_Box_1"
+  },
+  {
+    "Id": "Item_Pizza_1",
+    "Name": "피자",
+    "Description": "파인애플이 올려진 맛있는 피자다.",
+    "ItemType": "Normal",
+    "Grade": "Normal",
+    "MaxStackCount": 20,
+    "SellingPrice": 100,
+    "IconPath": "Icon/Icon_Item_Equip_Hat_1"
   }
 ]
