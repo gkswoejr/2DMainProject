@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
-  productName: UnityBasic_DaniTech
+  companyName: Default
+  productName: Unity
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -926,11 +926,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: a9a7ce82-4060-4016-9bec-c3449650808d
+  cloudProjectId: 745d403c-b312-495e-bd28-3c51cd291f48
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: UnityBasic_DaniTech
-  organizationId: hellena1717
+  projectName: Unity_2DMainProject
+  organizationId: gkswoejr6
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

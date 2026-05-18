@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 80e8e0aaab7e37b4084b72f287df5f5d
   m_SerializeEntries:
+  - m_GUID: 04b448ebe184830409d9374bd9387060
+    m_Address: 2D/Music_Sample_01
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0d079c0737bf2f246b127fb22a014fa1
     m_Address: Sound/Voice_Pug_2_failed
     m_ReadOnly: 0
