@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor.Overlays;
+using UnityEngine;
 
 public class DaniTech_MainUI : DaniTechUIBase
 {
@@ -6,6 +7,8 @@ public class DaniTech_MainUI : DaniTechUIBase
     [SerializeField] private DaniTechUIButton Btn_StartBattle;
     [SerializeField] private DaniTechUIButton Btn_MonsterSpawn;
     [SerializeField] private DaniTechUIButton Btn_OpenInventory;
+    [SerializeField] private DaniTechUIButton Btn_SaveGame;
+
 
     private void OnEnable()
     {
@@ -13,6 +16,7 @@ public class DaniTech_MainUI : DaniTechUIBase
         Btn_StartBattle.BindOnClickButtonEvent(OnClick_StartBattle);
         Btn_MonsterSpawn.BindOnClickButtonEvent(OnClicK_MonsterSpawn);
         Btn_OpenInventory.BindOnClickButtonEvent(OnClick_OpenInventory);
+        Btn_SaveGame.BindOnClickButtonEvent(OnClick_SaveGame);
     }
 
     public void OnClick_OpenInventory()
@@ -39,6 +43,11 @@ public class DaniTech_MainUI : DaniTechUIBase
         Debug.LogWarning("몬스터 스폰");
     }
 
-
+    public void OnClick_SaveGame()
+    {
+        DaniTechGameManager.Inst.SaveData();
+        DaniTechUIManager.Instance.OpenSimplePopup("게임 세이브");
+        Debug.LogWarning("게임 세이브");
+    }
 
 }

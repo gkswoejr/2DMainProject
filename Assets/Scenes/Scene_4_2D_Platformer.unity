@@ -1383,6 +1383,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5604727549626402814, guid: 14457a13bc925f44aa3f07a6dfa2f1f9, type: 3}
+      propertyPath: _spawnObjectDataId
+      value: harv_pizza_1
+      objectReference: {fileID: 0}
     - target: {fileID: 7076828881680688972, guid: 14457a13bc925f44aa3f07a6dfa2f1f9, type: 3}
       propertyPath: m_Name
       value: Map
