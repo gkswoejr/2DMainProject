@@ -8,6 +8,7 @@ public class DaniTech_MainUI : DaniTechUIBase
     [SerializeField] private DaniTechUIButton Btn_MonsterSpawn;
     [SerializeField] private DaniTechUIButton Btn_OpenInventory;
     [SerializeField] private DaniTechUIButton Btn_SaveGame;
+    [SerializeField] private DaniTechUIButton Btn_GameBook;
 
 
     private void OnEnable()
@@ -17,6 +18,15 @@ public class DaniTech_MainUI : DaniTechUIBase
         Btn_MonsterSpawn.BindOnClickButtonEvent(OnClicK_MonsterSpawn);
         Btn_OpenInventory.BindOnClickButtonEvent(OnClick_OpenInventory);
         Btn_SaveGame.BindOnClickButtonEvent(OnClick_SaveGame);
+        Btn_GameBook.BindOnClickButtonEvent(OnClick_OpenGameBook);
+
+    }
+
+    public void OnClick_OpenGameBook()
+    {
+        Debug.Log("됨");
+
+        DaniTechUIManager.Instance.OpenContentUI(DaniTechUIType.DNGameBookUI);
     }
 
     public void OnClick_OpenInventory()

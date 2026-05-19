@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
 
 public class HJD_2DPlayer : MonoBehaviour
 {
@@ -15,7 +17,10 @@ public class HJD_2DPlayer : MonoBehaviour
 
     [SerializeField] private HJD_ScoreUI _scoreUI;
 
-
+    [Header("마우스 위치설정")]
+    [SerializeField] private GameObject _attackArrow;
+    [SerializeField] private GameObject _attackPoint;
+    [SerializeField] private Camera _camera;
 
     private Rigidbody2D _rigidBody;
     private bool _isGrounded;
@@ -24,12 +29,16 @@ public class HJD_2DPlayer : MonoBehaviour
 
     private int _currentScore;
 
+    
+
     void Awake()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
 
         // 2D 캐릭터가 물리 충돌 시 회전해서 넘어지는 것 방지
         _rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        _camera = Camera.main;
     }
 
     void Update()
@@ -42,7 +51,7 @@ public class HJD_2DPlayer : MonoBehaviour
         {
             Jump();
         }
-
+        
         // 3. 캐릭터 방향 전환 (Flip)
         if (_horizontalInput > 0 && !_lookRight)
         {
@@ -60,7 +69,17 @@ public class HJD_2DPlayer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             ChangePlayerState(EntiyAnimState.Attack);
+            HJD_BattleManager.Instance.Attack(_attackPoint.transform);
         }
+
+        FellowMouse();
+
+    }
+    private void FellowMouse()
+    {
+        Vector3 mousePos = _camera.ScreenToWorldPoint(Input.mousePosition);
+        float angle = Mathf.Atan2(mousePos.y - _attackArrow.transform.position.y, mousePos.x - _attackArrow.transform.position.x) * Mathf.Rad2Deg;
+        _attackArrow.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
     }
 
     private void ChangePlayerState(EntiyAnimState newstate)

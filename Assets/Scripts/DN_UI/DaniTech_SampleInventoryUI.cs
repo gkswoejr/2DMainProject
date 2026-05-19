@@ -63,7 +63,7 @@ public class DaniTech_SampleInventoryUI : DaniTechUIBase
 
     public void OnClick_CreateSlotTest()
     {
-        // CreateSlot();
+        //CreateSlot();
     }
 
     private void CreateSlot(string itemDataId, int itemStackCount)

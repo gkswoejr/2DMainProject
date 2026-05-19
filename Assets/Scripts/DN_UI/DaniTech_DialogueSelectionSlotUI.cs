@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DaniTech_DialogueSelectionSlotUI : MonoBehaviour
+public class DaniTech_DialogueSelectionSlotUI : DaniTechUIBase
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
