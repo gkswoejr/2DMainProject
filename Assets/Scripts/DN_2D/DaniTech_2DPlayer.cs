@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 // +) 어떤 컴포넌트가 필수로 필요하다는 것을 강제할 수 있다
 [RequireComponent(typeof(Rigidbody2D))]
@@ -16,6 +17,15 @@ public class DaniTech_2DPlayer : MonoBehaviour
     [Header("애니메이터")]
     [SerializeField] private DaniTech_2DAnimatorController AnimatorController_Entity;
 
+    [Header("마우스 위치설정")]
+    [SerializeField] private GameObject _gameObjectAttackArrow;
+    
+    [SerializeField] private GameObject _attackPoint;
+    [SerializeField] private Camera _camera;
+
+    [Header("스킬 관련")]
+    [SerializeField] private GameObject Prefab_SkillObject;
+    [SerializeField] private Transform tranform_SkillObjectRoot;
 
 
     // 우선 직접 들고 있다가 추후에 UI매니저한테 요청하도록 개선해볼 것
@@ -25,6 +35,8 @@ public class DaniTech_2DPlayer : MonoBehaviour
     private bool _isGrounded;
     private float _horizontalInput;
     private bool _lookRight = true;
+
+    private bool _isSkillUsing;
 
     // 추후에는 이런 데이터가 저장될 수 있도록 UI에 있는 것보다 한곳으로 모여지는게 좋다
     private int _currentScore;
@@ -64,11 +76,19 @@ public class DaniTech_2DPlayer : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            ChangePlayerState(DaniTech_EntityAnimState.Atk);
+            UseNormalAttack();
         }
 
+        FellowMouse();
     }
 
+
+    private void FellowMouse()
+    {
+        Vector3 mousePos = _camera.ScreenToWorldPoint(Input.mousePosition);
+        float angle = Mathf.Atan2(mousePos.y - _gameObjectAttackArrow.transform.position.y, mousePos.x - _gameObjectAttackArrow.transform.position.x) * Mathf.Rad2Deg;
+        _gameObjectAttackArrow.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+    }
     private void ChangePlayerState(DaniTech_EntityAnimState newState)
     {
         // 이런 곳에 UI나 플레이어의 별도 처리를 넣어줄 수도 있다
@@ -151,4 +171,59 @@ public class DaniTech_2DPlayer : MonoBehaviour
         _currentScore++;
         _scoreUI.AddGameScore(_currentScore);
     }
+
+    private bool CheckSkillUseble(bool isShowMsg = true)
+    {
+        if (_isSkillUsing == true)
+        {
+            if (isShowMsg == true)
+            {
+                Debug.Log("사용중");
+            }
+            return false;
+        }
+
+        return true;
+        
+    }
+
+    public void UseNormalAttack()
+    {
+        if (CheckSkillUseble(isShowMsg:false)==false) { return; }
+        ChangePlayerState(DaniTech_EntityAnimState.Atk);
+
+        CreateProjectSkillObject();
+
+        StartCoroutine(CoStartNormalAttack());
+    }
+
+    public void UseFirstSkill()
+    {
+
+    }
+    public void UseSecondSkill()
+    {
+
+    }
+    public void UseThirdSkill()
+    {
+        CreateProjectSkillObject();
+    }
+   
+
+    private void CreateProjectSkillObject()
+    {
+        var gObj = Instantiate(Prefab_SkillObject,tranform_SkillObjectRoot.position, _gameObjectAttackArrow.transform.rotation);
+        if (gObj == null) return;
+
+
+    }
+
+    IEnumerator CoStartNormalAttack()
+    {
+        yield return new WaitForSeconds(1.0f);
+        //Prefab_SkillObject.gameObject.SetActive(false);
+
+    }
+
 }

@@ -10,6 +10,14 @@ public class DaniTech_MainUI : DaniTechUIBase
     [SerializeField] private DaniTechUIButton Btn_SaveGame;
     [SerializeField] private DaniTechUIButton Btn_GameBook;
 
+    [Header("스킬 버튼")]
+    [SerializeField] private DaniTechUIButton Btn_UseNormalAttack;
+    [SerializeField] private DaniTechUIButton Btn_UseFirstSkill;
+    [SerializeField] private DaniTechUIButton Btn_UseSecondSkill;
+    [SerializeField] private DaniTechUIButton Btn_UseThirdSkill;
+
+
+
 
     private void OnEnable()
     {
@@ -20,7 +28,32 @@ public class DaniTech_MainUI : DaniTechUIBase
         Btn_SaveGame.BindOnClickButtonEvent(OnClick_SaveGame);
         Btn_GameBook.BindOnClickButtonEvent(OnClick_OpenGameBook);
 
+        Btn_UseNormalAttack.BindOnClickButtonEvent(OnClick_UseNormalAttack);
+        Btn_UseFirstSkill.BindOnClickButtonEvent(OnClick_UseFirstSkill);
+        Btn_UseSecondSkill.BindOnClickButtonEvent (OnClick_UseSecondSkill);
+        Btn_UseThirdSkill.BindOnClickButtonEvent(OnClick_UseThirdSkill);
     }
+
+    private void OnClick_UseNormalAttack()
+    {
+        DaniTechGameManager.Inst.LocalPlayer.UseNormalAttack();
+    }
+    private void OnClick_UseFirstSkill()
+    {
+        DaniTechGameManager.Inst.LocalPlayer.UseFirstSkill();
+
+    }
+    private void OnClick_UseSecondSkill()
+    {
+        DaniTechGameManager.Inst.LocalPlayer.UseSecondSkill();
+
+    }
+    private void OnClick_UseThirdSkill()
+    {
+        DaniTechGameManager.Inst.LocalPlayer.UseThirdSkill();
+
+    }
+
 
     public void OnClick_OpenGameBook()
     {

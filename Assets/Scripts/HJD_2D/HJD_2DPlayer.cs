@@ -22,6 +22,14 @@ public class HJD_2DPlayer : MonoBehaviour
     [SerializeField] private GameObject _attackPoint;
     [SerializeField] private Camera _camera;
 
+    [Header("스킬 관련")]
+    [SerializeField] private Collider2D Collider_PlayerNormalAttack;
+    [SerializeField] private GameObject Prefab_SkillObject;
+    [SerializeField] private Transform tranform_SkillObjectRoot;
+
+    private bool _isSkillUsing;
+
+
     private Rigidbody2D _rigidBody;
     private bool _isGrounded;
     private float _horizontalInput;
@@ -156,4 +164,45 @@ public class HJD_2DPlayer : MonoBehaviour
         _currentScore++;
         _scoreUI.AddGameScore(_currentScore);
     }
+
+    private bool CheckSkillUseble(bool isShowMsg = true)
+    {
+        if (_isSkillUsing == true)
+        {
+            if (isShowMsg == true)
+            {
+                Debug.Log("사용중");
+            }
+            return false;
+        }
+
+        return true;
+
+    }
+
+   
+
+    public void UseFirstSkill()
+    {
+
+    }
+    public void UseSecondSkill()
+    {
+
+    }
+    public void UseThirdSkill()
+    {
+        CreateProjectSkillObject();
+    }
+
+
+    private void CreateProjectSkillObject()
+    {
+        var gObj = Instantiate(Prefab_SkillObject, tranform_SkillObjectRoot.position, this.gameObject.transform.rotation);
+        if (gObj == null) return;
+
+
+    }
+
+   
 }

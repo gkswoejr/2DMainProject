@@ -70,6 +70,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bce2d1c9ca0475e4cb876c354b7b0121
+    m_Address: 2D/tree-2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cfc5f99017f834a4aa425168d9f3048d
     m_Address: Icon/Icon_Item_Corn
     m_ReadOnly: 0

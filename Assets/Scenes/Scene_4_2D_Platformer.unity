@@ -863,6 +863,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   AnimatorController_Entity: {fileID: 869462304}
+  Collider_PlayerNormalAttack: {fileID: 0}
+  Prefab_SkillObject: {fileID: 4158576210380573445, guid: d215891395584084faddb64de5f18554, type: 3}
+  tranform_SkillObjectRoot: {fileID: 869462303}
   _scoreUI: {fileID: 7177077687602571757}
 --- !u!4 &869462303
 Transform:
@@ -1327,6 +1330,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ManagerContainer
       objectReference: {fileID: 0}
+    - target: {fileID: 8007951631376954100, guid: d9614b341da396f43a8b38d13a069d93, type: 3}
+      propertyPath: LocalPlayer
+      value: 
+      objectReference: {fileID: 869462302}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

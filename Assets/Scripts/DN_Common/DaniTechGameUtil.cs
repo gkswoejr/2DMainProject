@@ -56,6 +56,17 @@ public static class DaniTechGameUtil
         return sprite;
     }
 
+    public static async UniTask<Sprite> LoadAndSetSprite(SpriteRenderer targetSpriteRanderer, string spritePath)
+    {
+        
+        Sprite sprite = await DaniTechResourceManager.Inst.LoadSprite(spritePath);
+        if (sprite != null)
+        {
+            targetSpriteRanderer.sprite = sprite;
+        }
+        return sprite;
+    }
+    
     public static async UniTaskVoid LoadAndPlayAudioClip(AudioSource audioSource, string audioPath, bool isLoop = false)
     {
         AudioClip clip = await DaniTechResourceManager.Inst.LoadAsset<AudioClip>(audioPath);

@@ -269,7 +269,7 @@ GameObject:
   - component: {fileID: 103316266}
   - component: {fileID: 103316267}
   m_Layer: 0
-  m_Name: Pos
+  m_Name: AttackPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -284,7 +284,7 @@ Transform:
   m_GameObject: {fileID: 103316265}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.21, z: 0}
+  m_LocalPosition: {x: 0, y: 1.78, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -360,7 +360,7 @@ GameObject:
   - component: {fileID: 248724394}
   - component: {fileID: 248724395}
   m_Layer: 0
-  m_Name: Pos
+  m_Name: AttackArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -572,7 +572,7 @@ Transform:
   m_GameObject: {fileID: 467174255}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.5964947, y: -0.5622828, z: 0}
+  m_LocalPosition: {x: -14.88, y: 10.46, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -273808,6 +273808,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ManagerContainer
       objectReference: {fileID: 0}
+    - target: {fileID: 8007951631376954100, guid: d9614b341da396f43a8b38d13a069d93, type: 3}
+      propertyPath: LocalPlayer
+      value: 
+      objectReference: {fileID: 1171164498}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -294956,8 +294960,9 @@ GameObject:
   - component: {fileID: 1171164489}
   - component: {fileID: 1171164496}
   - component: {fileID: 1171164493}
-  - component: {fileID: 1171164492}
   - component: {fileID: 1171164495}
+  - component: {fileID: 1171164498}
+  - component: {fileID: 1171164497}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -294975,7 +294980,7 @@ Animator:
   m_GameObject: {fileID: 1171164488}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 759de714175457b4d8e3b5d3e8b57764, type: 2}
+  m_Controller: {fileID: 9100000, guid: b7b2c9096815a00408e546e2c469586f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -295036,7 +295041,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -251714589, guid: 716617de1180cd04ba5ccdb12b9d4721, type: 3}
+  m_Sprite: {fileID: -827202276, guid: 26998059125297843892361fe97ab356, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -295064,30 +295069,6 @@ Transform:
   - {fileID: 248724394}
   m_Father: {fileID: 2100775359}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1171164492
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1171164488}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac948a601e2cddf4db3c9dbdeb6277ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HJD_2DPlayer
-  _moveSpeed: 8
-  _jumpForce: 9
-  _groundCheck: {fileID: 1327385498}
-  _checkRadius: 0.38
-  _groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  animatorCotroller: {fileID: 1171164495}
-  _scoreUI: {fileID: 480791720}
-  _attackPoint: {fileID: 248724393}
-  _attackObject: {fileID: 0}
-  _camera: {fileID: 519420031}
 --- !u!50 &1171164493
 Rigidbody2D:
   serializedVersion: 5
@@ -295162,9 +295143,48 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.01866424, y: -0.0653221}
-  m_Size: {x: 0.9855945, y: 1.4101561}
+  m_Offset: {x: -0.01866424, y: -0.38432315}
+  m_Size: {x: 0.9855945, y: 2.0481582}
   m_Direction: 0
+--- !u!114 &1171164497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1171164488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2161eddfde673a468466435461959cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DaniTech_2DAnimatorController
+  Animator_Entity: {fileID: 1171164489}
+--- !u!114 &1171164498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1171164488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eba4062894d60ec408a1eec8cc09650d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DaniTech_2DPlayer
+  _moveSpeed: 8
+  _jumpForce: 9
+  _groundCheck: {fileID: 1327385498}
+  _checkRadius: 0.33
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  AnimatorController_Entity: {fileID: 1171164497}
+  _gameObjectAttackArrow: {fileID: 248724393}
+  _attackPoint: {fileID: 103316265}
+  _camera: {fileID: 519420031}
+  Prefab_SkillObject: {fileID: 4158576210380573445, guid: d215891395584084faddb64de5f18554, type: 3}
+  tranform_SkillObjectRoot: {fileID: 103316266}
+  _scoreUI: {fileID: 0}
 --- !u!1 &1327385497
 GameObject:
   m_ObjectHideFlags: 0
@@ -295190,7 +295210,7 @@ Transform:
   m_GameObject: {fileID: 1327385497}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.015999794, y: -0.627, z: 0}
+  m_LocalPosition: {x: 0, y: -1.45, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -295225,6 +295245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acfa49e8e07465e418a1ef4c0c7113fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HJD_BattleManager
+  _bullet: {fileID: 0}
 --- !u!4 &1342623705
 Transform:
   m_ObjectHideFlags: 0
