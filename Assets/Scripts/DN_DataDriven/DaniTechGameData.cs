@@ -90,6 +90,10 @@ public class DNMonsterData : GameDataBase
 {
     public string Name;
     public string Description;
+    public int BaseHp;
+    public int BaseAttackDamage;
+    public float NormalAttackMultiple;
+    public List<float> SkillAttackMultipleList = new List<float>();
     public string IconPath;
     public string PrefabPath;
 }

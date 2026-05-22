@@ -3,21 +3,44 @@
     "Id": "mob_slim_1",
     "Name": "슬라이무",
     "Description": "슬라이무는 공격을 받을 때마다 딸기맛, 초코맛, 바닐라맛으로 변한다",
+    "BaseHp": null,
+    "BaseAttackDamage": null,
+    "NormalAttackMultiple": null,
+    "SkillAttackMultipleList": null,
     "IconPath": null,
     "PrefabPath": null
   },
   {
     "Id": "mob_dog_1",
     "Name": "도그",
-    "Description": "도그는 도그다",
-    "IconPath": null,
-    "PrefabPath": null
+    "Description": "멍머이.",
+    "BaseHp": 200,
+    "BaseAttackDamage": 20,
+    "NormalAttackMultiple": 1.2,
+    "SkillAttackMultipleList": 0,
+    "IconPath": "Icon/Icon_Monster_dog_1",
+    "PrefabPath": "Prefab2DObject/Monster_Dog"
   },
   {
     "Id": "mob_pigme_1",
     "Name": "피그미",
     "Description": "피그미는 충돌하면 사라진다. 간헐적으로 금화가 터져나온다.",
+    "BaseHp": null,
+    "BaseAttackDamage": null,
+    "NormalAttackMultiple": null,
+    "SkillAttackMultipleList": null,
     "IconPath": null,
     "PrefabPath": null
+  },
+  {
+    "Id": "mob_opossum_1",
+    "Name": "두더지",
+    "Description": "땅을 파는 골칫거리 두더지.",
+    "BaseHp": 100,
+    "BaseAttackDamage": 10,
+    "NormalAttackMultiple": 1.2,
+    "SkillAttackMultipleList": 0,
+    "IconPath": "Icon/Icon_Monster_opossum_1",
+    "PrefabPath": "Prefab2DObject/Monster_Opossum"
   }
 ]

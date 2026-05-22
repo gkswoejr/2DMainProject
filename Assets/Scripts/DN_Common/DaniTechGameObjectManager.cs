@@ -16,6 +16,7 @@ public class DaniTechGameObjectManager : MonoBehaviour
     // 생성된 오브젝트의 생명을 보관
     private Dictionary<int, GameObject> _createdGameObjectContainer = new Dictionary<int, GameObject>();
     private Dictionary<int, DaniTech_2DFieldObject> _fieldObjectContainer = new Dictionary<int, DaniTech_2DFieldObject>();
+    private Dictionary<int, DaniTech_GameMonster_Dog> _gameMonsterObjectContainer = new Dictionary<int, DaniTech_GameMonster_Dog>();
 
     private void Awake()
     {
@@ -24,14 +25,14 @@ public class DaniTechGameObjectManager : MonoBehaviour
 
     public void RequestSpawnEnemy()
     {
-        if(Prefab_Enemy == null)
+        if (Prefab_Enemy == null)
         {
             Debug.LogWarning("프리팹이 등록되지 않은 오브젝트 입니다.");
             return;
         }
 
         var gObj = Instantiate(Prefab_Enemy, Root_Enemy);
-        if(gObj == null)
+        if (gObj == null)
         {
             Debug.LogWarning("생성에 실패한 게임 오브젝트 입니다.");
             return;
@@ -58,7 +59,7 @@ public class DaniTechGameObjectManager : MonoBehaviour
     {
         // 4-1 지금은 Enemy지만, 나중에 IGameEntity 같은 인터페이스로 개선하면 더 좋다
         DaniTech_2DEnemy gameEntity = gObj.GetComponent<DaniTech_2DEnemy>();
-        if(gameEntity == null)
+        if (gameEntity == null)
         {
             Debug.LogWarning($"생성된 {gObj.name}의 InstanceId를 대입할 수 있는 컴포넌트를 가져올 수 없습니다!");
             return;
@@ -71,7 +72,7 @@ public class DaniTechGameObjectManager : MonoBehaviour
 
     public GameObject GetEntityObjectCanBeNull(int instanceId)
     {
-        if(_createdGameObjectContainer.ContainsKey(instanceId) == false)
+        if (_createdGameObjectContainer.ContainsKey(instanceId) == false)
         {
             Debug.LogWarning($"{instanceId}는 존재하지 않습니다.");
             return null;
@@ -79,12 +80,12 @@ public class DaniTechGameObjectManager : MonoBehaviour
 
         // 2-1 실체화하면서 등록된 게임 오브젝트가 있다면 반환
         return _createdGameObjectContainer[instanceId];
-    } 
+    }
 
     public void RequestDestroyEntityObject(int instanceId)
     {
         var gObj = GetEntityObjectCanBeNull(instanceId);
-        if(gObj == null)
+        if (gObj == null)
         {
             return;
         }
@@ -94,7 +95,32 @@ public class DaniTechGameObjectManager : MonoBehaviour
         Destroy(gObj);
     }
 
+    public async UniTaskVoid CreateMonsterObject(string monsterObjectDataId, Transform spawnSpot)
+    {
+        var monsterObject = DaniTechGameDataManager.Instance.GetDNMonsterData(monsterObjectDataId);
+        if (monsterObject == null) return;
 
+        var createdObj = await DaniTechResourceManager.Inst.InstantiateAsync(monsterObject.PrefabPath, Root_Enemy, true);
+        createdObj.transform.position = spawnSpot.position;
+        
+
+
+        AddMonsterObjectOnCreate(createdObj, monsterObjectDataId);
+
+    }
+
+    private void AddMonsterObjectOnCreate(GameObject createdObject, string monsterDataId)
+    {
+        _objectInstanceKeyGenerator++;
+        int generatedInstanceId = _objectInstanceKeyGenerator;
+
+        var monsterComponent = createdObject.GetComponent<DaniTech_GameMonster_Dog>();
+        if (monsterComponent == null) return;
+
+        _gameMonsterObjectContainer.Add(generatedInstanceId, monsterComponent);
+
+        monsterComponent.InitMonster(generatedInstanceId, monsterDataId);
+    }
 
 
 
@@ -118,7 +144,7 @@ public class DaniTechGameObjectManager : MonoBehaviour
         var generatedInstanceId = _objectInstanceKeyGenerator;
         var fieldObject = createdObject.GetComponent<DaniTech_2DFieldObject>();
 
-        if(fieldObject != null)
+        if (fieldObject != null)
         {
             _fieldObjectContainer.Add(generatedInstanceId, fieldObject);
             fieldObject.InitFieldObjectInfoOnCreated(generatedInstanceId, fieldObjectDataId);
@@ -140,12 +166,12 @@ public class DaniTechGameObjectManager : MonoBehaviour
 
     public DaniTech_2DFieldObject GetFieldObjectByInstanceId(int fieldObjectInstanceId)
     {
-        if(_fieldObjectContainer.ContainsKey(fieldObjectInstanceId) == false)
+        if (_fieldObjectContainer.ContainsKey(fieldObjectInstanceId) == false)
         {
             Debug.LogError($"{fieldObjectInstanceId} 찾으려는 필드 오브젝트가 유효하지 않습니다");
             return null;
         }
 
         return _fieldObjectContainer[fieldObjectInstanceId];
-    } 
+    }
 }

@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HJD_SkillProjectile
   Sprite_Skill: {fileID: 1810915210935993927}
-  _moveSpeed: 15
+  _moveSpeed: 30
 --- !u!1 &8334789205953733726
 GameObject:
   m_ObjectHideFlags: 0
