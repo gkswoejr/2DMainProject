@@ -37,20 +37,26 @@ public class DaniTech_MainUI : DaniTechUIBase
     private void OnClick_UseNormalAttack()
     {
         DaniTechGameManager.Inst.LocalPlayer.UseNormalAttack();
+        var localPlayer = DaniTechGameManager.Inst.GetLocalPlayer(); //  DaniTechGameObjectManager.Inst.GetLocalPlayer();
+        localPlayer.UseNormalAttack();
     }
+
     private void OnClick_UseFirstSkill()
     {
-        DaniTechGameManager.Inst.LocalPlayer.UseFirstSkill();
+        var localPlayer = DaniTechGameManager.Inst.GetLocalPlayer(); //  DaniTechGameObjectManager.Inst.GetLocalPlayer();
+        localPlayer.UseFirstSkill();
+    }    
 
-    }
     private void OnClick_UseSecondSkill()
     {
-        DaniTechGameManager.Inst.LocalPlayer.UseSecondSkill();
+        var localPlayer = DaniTechGameManager.Inst.GetLocalPlayer(); //  DaniTechGameObjectManager.Inst.GetLocalPlayer();
+        localPlayer.UseSecondSkill();
 
     }
     private void OnClick_UseThirdSkill()
     {
-        DaniTechGameManager.Inst.LocalPlayer.UseThirdSkill();
+        var localPlayer = DaniTechGameManager.Inst.GetLocalPlayer(); //  DaniTechGameObjectManager.Inst.GetLocalPlayer();
+        localPlayer.UseThirdSkill();
 
     }
 

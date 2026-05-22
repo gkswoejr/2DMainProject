@@ -5,10 +5,15 @@ public class DaniTechGameManager : MonoBehaviour
 {
     public static DaniTechGameManager Inst { get; set; }
 
-    public DaniTech_2DPlayer LocalPlayer;
-
+    
+    public DaniTech_2DPlayer LocalPlayer; // GameObjectManager또는 GameManager의 GetLocalPlayer
     // 플레이 중에 저장되어야 하는 정보들이 있는 위치
     private DaniTechPlayerModel _playerModel = new DaniTechPlayerModel();
+
+    public DaniTech_2DPlayer GetLocalPlayer()
+    {
+        return DaniTechGameObjectManager.Inst.GetLocalPlayer();
+    }
 
     private void Awake()
     {

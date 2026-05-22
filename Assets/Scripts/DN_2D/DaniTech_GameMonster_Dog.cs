@@ -46,6 +46,12 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
 
     }
 
+
+    public int GetMonsterInstanceId() // 유니티에 GetInstanceID랑 헷갈리지 않도록 함수명을 복잡하게 쓴다
+    {
+        // 객체 - 데이터 부에 있는것을 반환
+        return _instanceId;
+    }
     private int GetFinalNormalAttackDamage(int baseAttack, float normalAttackMultiple)
     {
         return GetFinalSkillAttackDamage(baseAttack,normalAttackMultiple);
@@ -97,5 +103,42 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
        
         var gObj = Instantiate(Prefab_ThisMonsterSkillObject, transform.position, GameObject_SkillObjectRoot.transform.rotation);
         if (gObj == null) return;
+
+        var skillProjectileComponent = gObj.GetComponent<HJD_SkillProjectile>();
+        if (skillProjectileComponent == null) return;
+
+        // TODO : 추후 함수로 빠져야함
+        float skillMultiple = _thisMonsterData.SkillAttackMultipleList.Count > 0 ? _thisMonsterData.SkillAttackMultipleList[0] : 0;
+        int finalSkillDamage = GetFinalSkillAttackDamage(_baseAttack, skillMultiple);
+        var tag = this.gameObject.tag;
+        skillProjectileComponent.InitSkillObject(_instanceId, this.transform.position, finalSkillDamage, tag, OnSkillCollision);
+    }
+
+    private void OnSkillCollision(int colliedObjectInstanceId, int damage)
+    {
+        if (colliedObjectInstanceId == 0) // 0이면 플레이어라는 규칙이 있으므로
+        {
+            var player = DaniTechGameObjectManager.Inst.GetLocalPlayer();
+
+            // 스킬이 충돌한 시점에서 다시한번 데미지를 계산해도 된다 - 기획적인 요소
+            // float skillMultiple = _thisMonsterData.SkillAtkMultipleList.Count > 0 ? _thisMonsterData.SkillAtkMultipleList[0] : 0;
+            // int finalSkillDamage = GetFinalSkillDamage(_baseAtk, skillMultiple);
+
+            player.TakeDamage(damage);
+        }
+    }
+
+    public void TakeDamage(int playerDamage)
+    {
+        _baseHp -= playerDamage;
+
+        // 피격 이펙트 같은거 활성화
+        // SpriteRenderer_Damage.gameObject.SetActive(true);
+
+        // 몬스터 죽음
+        if (_baseHp < 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

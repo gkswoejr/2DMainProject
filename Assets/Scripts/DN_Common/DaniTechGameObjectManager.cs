@@ -18,10 +18,33 @@ public class DaniTechGameObjectManager : MonoBehaviour
     private Dictionary<int, DaniTech_2DFieldObject> _fieldObjectContainer = new Dictionary<int, DaniTech_2DFieldObject>();
     private Dictionary<int, DaniTech_GameMonster_Dog> _gameMonsterObjectContainer = new Dictionary<int, DaniTech_GameMonster_Dog>();
 
+    private DaniTech_2DPlayer _localPlayer;
+
+   
     private void Awake()
     {
         Inst = this;
     }
+
+    public void RegisterLocalPlayer(DaniTech_2DPlayer localPlayer)
+    {
+        _localPlayer = localPlayer;
+    }
+    //프로퍼티가 있긴 하지만 직접 참조하는 것보다는 Get 함수를 한정해서 사용하자
+
+
+    public DaniTech_2DPlayer GetLocalPlayer()
+    {
+        if (_localPlayer == null)
+        {
+            Debug.LogError("등록된 플레이어가 없는데! 참조하려고 시도하고 있습니다!!");
+            return null;
+        }
+
+        // 우리가 배웠던 원시적인 Get함수입니다. -> 원시적이지만 유용함
+        return _localPlayer;
+    }
+
 
     public void RequestSpawnEnemy()
     {
@@ -122,7 +145,16 @@ public class DaniTechGameObjectManager : MonoBehaviour
         monsterComponent.InitMonster(generatedInstanceId, monsterDataId);
     }
 
+    public DaniTech_GameMonster_Dog GetMonsterObjectByInstanceId(int monsterInstanceId)
+    {
+        if (_gameMonsterObjectContainer.ContainsKey(monsterInstanceId) == false)
+        {
+            Debug.LogError($"{monsterInstanceId} 찾으려는 몬스터가 유효하지 않습니다");
+            return null;
+        }
 
+        return _gameMonsterObjectContainer[monsterInstanceId];
+    }
 
 
     //[필드 오브젝트] ====================================================================================================
