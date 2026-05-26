@@ -77,7 +77,6 @@ public class HJD_2DPlayer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             ChangePlayerState(EntiyAnimState.Attack);
-            HJD_BattleManager.Instance.Attack(_attackPoint.transform);
         }
 
         FellowMouse();

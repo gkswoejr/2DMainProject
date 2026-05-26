@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 // +) 어떤 컴포넌트가 필수로 필요하다는 것을 강제할 수 있다
@@ -28,7 +29,10 @@ public class DaniTech_2DPlayer : MonoBehaviour
     [SerializeField] private Transform tranform_SkillObjectRoot;
 
     [Header("전투 관련 정보")]
+    [SerializeField] private int _maxHp;
     [SerializeField] private int _playerHp = 1000;
+    [SerializeField] private int _playerSp = 100;
+
     [SerializeField] private int _playerBaseAtk = 100;
 
     // 우선 직접 들고 있다가 추후에 UI매니저한테 요청하도록 개선해볼 것
@@ -44,36 +48,29 @@ public class DaniTech_2DPlayer : MonoBehaviour
     // 추후에는 이런 데이터가 저장될 수 있도록 UI에 있는 것보다 한곳으로 모여지는게 좋다
     private int _currentScore;
 
+    private event Action<int, int> _onHpChanged;
+    private event Action<int, int> _onSpChanged;
+
+
     void Awake()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
 
         // 2D 캐릭터가 물리 충돌 시 회전해서 넘어지는 것 방지
         _rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        _playerHp = 1000;
+        _maxHp = _playerHp;
     }
 
-    public void TakeDamage(int damage)
-    {
-        _playerHp -= damage;
-        Debug.Log($"{_playerHp}");
-
-        if (_playerHp < 0)
-        {
-            // 죽음 처리를 여기서 해두고
-            PlayerDie();
-        }
-    }
-
-    public void PlayerDie()
-    {
-        // bool _isAlive = false;
-    }
+    
 
 
     private void Start()
     {
         // 나 스스로를 등록한다. -> 씬에 있는 그 2D 플레이어가 등록됨
         DaniTechGameObjectManager.Inst.RegisterLocalPlayer(this);
+        DaniTechUIManager.Instance.AddHudSlot(0, this.gameObject.transform);
     }
 
     void Update()
@@ -155,14 +152,7 @@ public class DaniTech_2DPlayer : MonoBehaviour
     }
 
     // 에디터 뷰에서 지면 체크 범위를 시각적으로 확인
-    private void OnDrawGizmos()
-    {
-        if (_groundCheck != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(_groundCheck.position, _checkRadius);
-        }
-    }
+   
 
     // 6) 적 충돌 시 처리를 해보자
     private void OnCollisionEnter2D(Collision2D collision)
@@ -199,6 +189,8 @@ public class DaniTech_2DPlayer : MonoBehaviour
         _scoreUI.AddGameScore(_currentScore);
     }
 
+
+
     private bool CheckSkillUseble(bool isShowMsg = true)
     {
         if (_isSkillUsing == true)
@@ -214,6 +206,7 @@ public class DaniTech_2DPlayer : MonoBehaviour
         
     }
 
+    
     public void UseNormalAttack()
     {
         if (CheckSkillUseble(isShowMsg:false)==false) { return; }
@@ -272,4 +265,49 @@ public class DaniTech_2DPlayer : MonoBehaviour
 
     }
 
+
+    public void TakeDamage(int damage)
+    {
+        _playerHp -= damage;
+        Debug.Log($"{_playerHp}");
+
+        InvokeStatChangedEvent();
+        if (_playerHp < 0)
+        {
+            // 죽음 처리를 여기서 해두고
+            PlayerDie();
+        }
+    }
+
+    public void PlayerDie()
+    {
+        // bool _isAlive = false;
+    }
+
+    public void BindOnstatChangedEvent(Action<int,int> hpChangeCallback, Action<int, int> spChangeCallback)
+    {
+        _onHpChanged += hpChangeCallback;
+        _onSpChanged += spChangeCallback;
+    }
+    public void ResetstatChangedEvent()
+    {
+        _onHpChanged = null;
+        _onSpChanged = null;
+    }
+
+    private void InvokeStatChangedEvent()
+    {
+        _onHpChanged?.Invoke(_playerHp,_maxHp);
+       // _onSpChanged?.Invoke(_playerSp);
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        if (_groundCheck != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(_groundCheck.position, _checkRadius);
+        }
+    }
 }

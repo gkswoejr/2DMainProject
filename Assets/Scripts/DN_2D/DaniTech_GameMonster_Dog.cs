@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -20,8 +21,12 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
     public int _baseAttack;
     public bool _isAlive = true;
     private bool _lootRight = true;
+    private int _maxHp;
 
     private Vector3 _moveDirection;
+
+    private event Action<int, int> _onHpChanged;
+    private event Action<int, int> _onSpChanged;
 
     private void OnDisable()
     {
@@ -40,7 +45,11 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
             _thisMonsterData = monsterData;
             _baseHp = _thisMonsterData.BaseHp;
             _baseAttack = _thisMonsterData.BaseAttackDamage;
+
+            _maxHp = _baseHp;
         }
+
+        DaniTechUIManager.Instance.AddHudSlot(instanceId, this.gameObject.transform);
 
         StartCoroutine(CheckAndUseSkill());
 
@@ -108,8 +117,10 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
         if (skillProjectileComponent == null) return;
 
         // TODO : 추후 함수로 빠져야함
+
         float skillMultiple = _thisMonsterData.SkillAttackMultipleList.Count > 0 ? _thisMonsterData.SkillAttackMultipleList[0] : 0;
         int finalSkillDamage = GetFinalSkillAttackDamage(_baseAttack, skillMultiple);
+        
         var tag = this.gameObject.tag;
         skillProjectileComponent.InitSkillObject(_instanceId, this.transform.position, finalSkillDamage, tag, OnSkillCollision);
     }
@@ -136,9 +147,30 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
         // SpriteRenderer_Damage.gameObject.SetActive(true);
 
         // 몬스터 죽음
+        InvokeStatChangedEvent();
         if (_baseHp < 0)
         {
             Destroy(this.gameObject);
+            DaniTechUIManager.Instance.RemoveHudSlot(_instanceId);
         }
     }
+
+
+    public void BindOnstatChangedEvent(Action<int, int> hpChangeCallback, Action<int, int> spChangeCallback)
+    {
+        _onHpChanged += hpChangeCallback;
+        _onSpChanged += spChangeCallback;
+    }
+    public void ResetstatChangedEvent()
+    {
+        _onHpChanged = null;
+        _onSpChanged = null;
+    }
+
+    private void InvokeStatChangedEvent()
+    {
+        _onHpChanged?.Invoke(_baseHp, _maxHp);
+        // _onSpChanged?.Invoke(_playerSp);
+    }
+
 }
