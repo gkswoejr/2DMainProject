@@ -8,6 +8,7 @@ public class DaniTechUIButton : MonoBehaviour
     [SerializeField] private Text Text_Base;
     [SerializeField] private Image Image_Base;
     [SerializeField] private Image Image_Select;
+    private bool _isSlotMenualUnbindEvent;
 
     private void Awake()
     {
@@ -23,7 +24,10 @@ public class DaniTechUIButton : MonoBehaviour
 
     private void OnDisable()
     {
-        Button_Base.onClick.RemoveAllListeners();
+        //if(_isSlotMenualUnbindEvent == false)
+        //{
+        //    Button_Base.onClick.RemoveAllListeners();
+        //}
     }
 
 
@@ -51,11 +55,12 @@ public class DaniTechUIButton : MonoBehaviour
         }
     }
 
-    public void BindOnClickButtonEvent(Action onClickCallback)
+    public void BindOnClickButtonEvent(Action onClickCallback, bool isMenualUnbineEvent = false)
     {
         if (Button_Base == null) { Debug.Log("버튼 등록 실패"); return; }
 
         Button_Base.onClick.AddListener(new UnityEngine.Events.UnityAction(onClickCallback));
+        _isSlotMenualUnbindEvent = isMenualUnbineEvent;
 
     }
 

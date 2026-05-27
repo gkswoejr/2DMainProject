@@ -17,7 +17,10 @@
     "BaseHp": 2000,
     "BaseAttackDamage": 20,
     "NormalAttackMultiple": 1.2,
-    "SkillAttackMultipleList": 0,
+    "SkillAttackMultipleList": [
+      1.5,
+      5
+    ],
     "IconPath": "Icon/Icon_Monster_dog_1",
     "PrefabPath": "Prefab2DObject/Monster_Dog"
   },
@@ -39,7 +42,10 @@
     "BaseHp": 1000,
     "BaseAttackDamage": 10,
     "NormalAttackMultiple": 1.2,
-    "SkillAttackMultipleList": 0,
+    "SkillAttackMultipleList": [
+      1.5,
+      5
+    ],
     "IconPath": "Icon/Icon_Monster_opossum_1",
     "PrefabPath": "Prefab2DObject/Monster_Opossum"
   }

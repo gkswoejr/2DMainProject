@@ -29,8 +29,9 @@ public class DaniTech_GameBookUI : DaniTechUIBase
     private void OnEnable()
     {
         ReadItemListAndCreateSlot();
-        Button_Quit.BindOnClickButtonEvent(OnClick_CloseGameBookUI);
         // 이 UI가 열릴 때 기본적으로 도감안에 있는 모든 데이터를 불러온다
+
+        Button_Quit.BindOnClickButtonEvent(OnClick_CloseGameBookUI);
     }
 
     private void OnDisable()

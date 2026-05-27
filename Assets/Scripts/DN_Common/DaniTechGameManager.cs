@@ -67,4 +67,28 @@ public class DaniTechGameManager : MonoBehaviour
         // _playerModel이 Private이므로 외부에서 ItemList를 받아올 수 있게 Get함수를 사용한다
         return _playerModel.ItemList;
     }
+
+    public bool RequestRemoveItem(long requestRemoveTargetItemUniqueId)
+    {
+        int removeTargetIdx = 0;
+        bool isRemoveItemExist = false;
+        foreach (var itemModel in _playerModel.ItemList)
+        {
+            if (itemModel.ItemUniqueId == requestRemoveTargetItemUniqueId)
+            {
+                isRemoveItemExist = true;
+                break;
+            }
+            removeTargetIdx++;
+        }
+
+        if (isRemoveItemExist == true)
+        {
+            _playerModel.ItemList.RemoveAt(removeTargetIdx);
+            SaveData();
+            return true;
+        }
+
+        return false;
+    }
 }

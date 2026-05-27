@@ -31,6 +31,7 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
     private void OnDisable()
     {
         _isAlive = false;
+        ResetstatChangedEvent(); //스탯변경하는 이벤트 초기화
     }
 
 

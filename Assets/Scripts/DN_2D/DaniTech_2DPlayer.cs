@@ -30,7 +30,7 @@ public class DaniTech_2DPlayer : MonoBehaviour
 
     [Header("전투 관련 정보")]
     [SerializeField] private int _maxHp;
-    [SerializeField] private int _playerHp = 1000;
+    [SerializeField] private int _playerHp = 100;
     [SerializeField] private int _playerSp = 100;
 
     [SerializeField] private int _playerBaseAtk = 100;
@@ -59,7 +59,7 @@ public class DaniTech_2DPlayer : MonoBehaviour
         // 2D 캐릭터가 물리 충돌 시 회전해서 넘어지는 것 방지
         _rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
 
-        _playerHp = 1000;
+        
         _maxHp = _playerHp;
     }
 
@@ -240,7 +240,7 @@ public class DaniTech_2DPlayer : MonoBehaviour
         if (skillProjectileComponent == null) return;
 
         var tag = this.gameObject.tag;
-        skillProjectileComponent.InitSkillObject(0, this.transform.position, 500, tag, OnMonsterCollied);
+        skillProjectileComponent.InitSkillObject(0, this.transform.position, _playerBaseAtk, tag, OnMonsterCollied);
     }
     private void OnMonsterCollied(int monsterInstanceId, int skillDamage)
     {
@@ -282,6 +282,8 @@ public class DaniTech_2DPlayer : MonoBehaviour
     public void PlayerDie()
     {
         // bool _isAlive = false;
+        // Destroy(this.gameObject);
+        DaniTechUIManager.Instance.RemoveHudSlot(0);
     }
 
     public void BindOnstatChangedEvent(Action<int,int> hpChangeCallback, Action<int, int> spChangeCallback)
