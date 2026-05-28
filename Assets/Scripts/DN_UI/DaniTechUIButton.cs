@@ -17,17 +17,14 @@ public class DaniTechUIButton : MonoBehaviour
         SetDefaultUI();
     }
 
-    private void OnEnable()
-    {
-        BindOnClickButtonEvent(OnClickSetSelectUI);
-    }
+   
 
     private void OnDisable()
     {
-        //if(_isSlotMenualUnbindEvent == false)
-        //{
-        //    Button_Base.onClick.RemoveAllListeners();
-        //}
+        if(_isSlotMenualUnbindEvent == false)
+        {
+            Button_Base.onClick.RemoveAllListeners();
+        }
     }
 
 
@@ -59,16 +56,16 @@ public class DaniTechUIButton : MonoBehaviour
     {
         if (Button_Base == null) { Debug.Log("버튼 등록 실패"); return; }
 
-        Button_Base.onClick.AddListener(new UnityEngine.Events.UnityAction(onClickCallback));
+        Button_Base.onClick.AddListener(onClickCallback.Invoke);
         _isSlotMenualUnbindEvent = isMenualUnbineEvent;
 
     }
 
-    public void UnBindOnClickButtonEvent(Action onClickCallback)
+    public void UnBindAllOnClickButtonEvent()
     {
         if (Button_Base == null) return;
 
-        Button_Base.onClick.RemoveListener(new UnityEngine.Events.UnityAction(onClickCallback));
+        Button_Base.onClick.RemoveAllListeners();
     }
 
     public void ChangeButtonText(string buttonStr)
@@ -79,12 +76,5 @@ public class DaniTechUIButton : MonoBehaviour
         Text_Base.text = buttonStr;
     }
 
-    private void OnClickSetSelectUI()
-    {
-        if(Image_Select != null)
-        {
-            bool currentActive = Image_Select.gameObject.activeSelf;
-            Image_Select.gameObject.SetActive(!currentActive);
-        }
-    }
+    
 }

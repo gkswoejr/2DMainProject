@@ -5,7 +5,7 @@ public class DaniTechGameManager : MonoBehaviour
 {
     public static DaniTechGameManager Inst { get; set; }
 
-    
+
     public DaniTech_2DPlayer LocalPlayer; // GameObjectManager또는 GameManager의 GetLocalPlayer
     // 플레이 중에 저장되어야 하는 정보들이 있는 위치
     private DaniTechPlayerModel _playerModel = new DaniTechPlayerModel();
@@ -68,19 +68,88 @@ public class DaniTechGameManager : MonoBehaviour
         return _playerModel.ItemList;
     }
 
-    public bool RequestRemoveItem(long requestRemoveTargetItemUniqueId)
+    public bool RequestUseItem(long requestUseTargetItemUniqueId)
     {
         int removeTargetIdx = 0;
         bool isRemoveItemExist = false;
         foreach (var itemModel in _playerModel.ItemList)
         {
-            if (itemModel.ItemUniqueId == requestRemoveTargetItemUniqueId)
+            if (itemModel.ItemUniqueId == requestUseTargetItemUniqueId)
             {
                 isRemoveItemExist = true;
+                string itemDataId = itemModel.ItemDataId;
+                var itemData = DaniTechGameDataManager.Instance.GetDNItemData(itemDataId);
+                if (string.IsNullOrEmpty(itemData.UseItemType) == false)
+                {
+                    //사용할 수 있는 아이템이니 사용 부분을 실행
+                    UseItemFunction(itemData.UseItemType, itemData.UseItemParameterList);
+                }
                 break;
             }
             removeTargetIdx++;
         }
+
+        RequestRemoveItem(isRemoveItemExist, removeTargetIdx);
+        return true;
+    }
+
+    private void UseItemFunction(string itemUseType, List<string> useItemParameterList)
+    {
+        if (useItemParameterList == null || useItemParameterList.Count == 0)
+        {
+            return;
+        }
+
+        if (itemUseType == "RandomItemBox")
+        {
+
+        }
+        else if (itemUseType == "StatChangeAtk")
+        {
+            if (useItemParameterList.Count > 0)
+            {
+                string str = useItemParameterList[0];
+                int statChangeVal = int.Parse(str);
+                var playerComponent = GetLocalPlayer();
+                playerComponent.AddAtk(statChangeVal);
+            }
+
+        }
+        else if (itemUseType == "StatChangeHp")
+        {
+            if (useItemParameterList.Count > 0)
+            {
+                string str = useItemParameterList[0];
+                int statChangeVal = int.Parse(str);
+                var playerComponent = GetLocalPlayer();
+                playerComponent.AddHp(statChangeVal);
+            }
+        }
+        else if (itemUseType == "SummonMonster")
+        {
+            if (useItemParameterList.Count > 0)
+            {
+                string str = useItemParameterList[0];
+                var strArr = str.Split(":");
+                if (strArr.Length > 1)
+                {
+                    string monsterDataId = strArr[0];
+                    int monsterSummonCount = int.Parse(strArr[1]);
+
+                    for (int i = 0; i < monsterSummonCount; i++)
+                    {
+                        var playerComponent = GetLocalPlayer();
+                        DaniTechGameObjectManager.Inst.CreateMonsterObject(monsterDataId, playerComponent.transform).Forget();
+                    }
+                }
+            }
+
+
+        }
+    }
+    private bool RequestRemoveItem(bool isRemoveItemExist, int removeTargetIdx)
+    {
+
 
         if (isRemoveItemExist == true)
         {

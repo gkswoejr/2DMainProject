@@ -283,7 +283,7 @@ public class DaniTech_2DPlayer : MonoBehaviour
     {
         // bool _isAlive = false;
         // Destroy(this.gameObject);
-        DaniTechUIManager.Instance.RemoveHudSlot(0);
+        //DaniTechUIManager.Instance.RemoveHudSlot(0);
     }
 
     public void BindOnstatChangedEvent(Action<int,int> hpChangeCallback, Action<int, int> spChangeCallback)
@@ -311,5 +311,16 @@ public class DaniTech_2DPlayer : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(_groundCheck.position, _checkRadius);
         }
+    }
+
+    public void AddHp(int hp)
+    {
+        _playerHp += hp;
+        InvokeStatChangedEvent();
+    }
+
+    public void AddAtk(int atk)
+    {
+        _playerBaseAtk += atk;
     }
 }

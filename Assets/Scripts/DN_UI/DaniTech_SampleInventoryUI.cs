@@ -30,7 +30,7 @@ public class DaniTech_SampleInventoryUI : DaniTechUIBase
         // _itemSlotList.Clear();
         // Destroy
 
-        Button_UseSelectItem.UnBindOnClickButtonEvent(OnClick_UseSelectItem);
+        Button_UseSelectItem.UnBindAllOnClickButtonEvent();
     }
     private void SetInventoryItemSlotOnEnable()
     {
@@ -73,7 +73,7 @@ public class DaniTech_SampleInventoryUI : DaniTechUIBase
     private void RequestSelectedUseItem()
     {
         // 게임 매니저에 아이템 제거를 요청!
-        bool isItemRemoved = DaniTechGameManager.Inst.RequestRemoveItem(_currentSelectedItemUniqueId);
+        bool isItemRemoved = DaniTechGameManager.Inst.RequestUseItem(_currentSelectedItemUniqueId);
         if (isItemRemoved == true)
         {
             RemoveItemSlot(_currentSelectedItemUniqueId);
