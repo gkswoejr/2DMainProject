@@ -9,6 +9,7 @@ public class DaniTechGameManager : MonoBehaviour
     public DaniTech_2DPlayer LocalPlayer; // GameObjectManager또는 GameManager의 GetLocalPlayer
     // 플레이 중에 저장되어야 하는 정보들이 있는 위치
     private DaniTechPlayerModel _playerModel = new DaniTechPlayerModel();
+    private Transform currentRespawnPoint;
 
     public DaniTech_2DPlayer GetLocalPlayer()
     {
@@ -159,5 +160,23 @@ public class DaniTechGameManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void RequestCreateSKillObject()
+    {
+
+       // DaniTechGameObjectManager.Inst.CreateSKillObject();
+    }
+
+    public void SetPlayerRespawnPoint(Transform newPoint)
+    {
+        currentRespawnPoint = newPoint;
+    }
+
+    public void RespawnPlayer()
+    {
+
+        // 위치 이동
+        LocalPlayer.transform.position = currentRespawnPoint.position;
     }
 }

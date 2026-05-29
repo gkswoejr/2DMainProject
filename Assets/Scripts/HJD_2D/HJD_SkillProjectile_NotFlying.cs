@@ -1,16 +1,14 @@
-using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 using System.Collections;
 
 
-public class HJD_SkillProjectile : HJD_SkillBase
+public class HJD_SkillProjectile_NotFlying : HJD_SkillBase
 {
 
-    void Update()
-    {
-        transform.Translate(Vector3.up * _moveSpeed * Time.deltaTime);
-    }
+
+   
     protected override void SKillLife()
     {
 

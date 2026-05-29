@@ -6,7 +6,9 @@ public enum DNSpawnSpotType
     Harvest,
     DropItem,
     Dialogue,
-    Monster
+    Monster,
+    Ending,
+    Player
 }
 
 public enum DNStartSpawnType
@@ -77,6 +79,13 @@ public class DaniTech_SpawnSpot : MonoBehaviour
                 DaniTechUIManager.Instance.OpenDialogueUI(_spawnObjectDataId);
                 this.gameObject.SetActive(false);
                 break;
+            case DNSpawnSpotType.Ending:
+                DaniTechUIManager.Instance.OpenUI(DaniTechUIRootType.VeryFrontUI,DaniTechUIType.EndingUI);
+                break;
+            case DNSpawnSpotType.Player:
+                DaniTechGameManager.Inst.SetPlayerRespawnPoint(this.transform);
+                break;
+
         }
     }
 

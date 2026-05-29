@@ -26,6 +26,7 @@ public class DNSkillData : GameDataBase
 {
     public string Name;
     public string Description;
+    public string PrefabPath;
     public string SpritePath;
 }
 

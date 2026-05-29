@@ -21,7 +21,8 @@ public enum DaniTechUIType
     DNInfoBookUI,
     DNRobbyUI,
     DNGameBookUI,
-    DNHudUI
+    DNHudUI,
+    EndingUI
 }
 
 public static class DaniTechUIManagerExtension
@@ -148,6 +149,20 @@ public static class DaniTechUIManagerExtension
             // 그 대상이 생성됬을 때 호출
             // 몬스터 동적생성이 선행적으로 구조가 잘 잡혀있으므로 그걸 이용할 수 있다
             hudUi.RemoveHudSlot(instanceId);
+        }
+    }
+
+    public static void AddMainHud(this DaniTechUIManager uiManager, int instanceId, Transform tagetTransform)
+    {
+        var uiBase = uiManager.GetOpenedUI(DaniTechUIRootType.MainUI, DaniTechUIType.DNMainUI);
+        if (uiBase == null) return;
+
+        // 기존에 GetComponent를 하던 부분이 클래스 형변환을 해도 되도록 개선되었다 (UIBase를 상속받기 때문)
+        if (uiBase is DaniTech_MainUI hudUi)
+        {
+            // 그 대상이 생성됬을 때 호출
+            // 몬스터 동적생성이 선행적으로 구조가 잘 잡혀있으므로 그걸 이용할 수 있다
+            hudUi.InitMainHud(instanceId, tagetTransform);
         }
     }
 

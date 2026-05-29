@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
 
 public class DaniTech_MainUI : DaniTechUIBase
 {
@@ -11,12 +14,15 @@ public class DaniTech_MainUI : DaniTechUIBase
 
     [Header("스킬 버튼")]
     [SerializeField] private DaniTechUIButton Btn_UseNormalAttack;
-    [SerializeField] private DaniTechUIButton Btn_UseFirstSkill;
-    [SerializeField] private DaniTechUIButton Btn_UseSecondSkill;
-    [SerializeField] private DaniTechUIButton Btn_UseThirdSkill;
+    
 
+    [Header("스킬 버튼")]
+    [SerializeField] private Slider Slider_Hp;
+    [SerializeField] private Slider Slider_Sp;
+    [SerializeField] private TextMeshProUGUI _textMesh_Hp;
 
-
+    private int _instanceId;
+    private Transform _targetTransform;
 
     private void OnEnable()
     {
@@ -28,14 +34,13 @@ public class DaniTech_MainUI : DaniTechUIBase
         Btn_GameBook.BindOnClickButtonEvent(OnClick_OpenGameBook);
 
         Btn_UseNormalAttack.BindOnClickButtonEvent(OnClick_UseNormalAttack);
-        Btn_UseFirstSkill.BindOnClickButtonEvent(OnClick_UseFirstSkill);
-        Btn_UseSecondSkill.BindOnClickButtonEvent (OnClick_UseSecondSkill);
-        Btn_UseThirdSkill.BindOnClickButtonEvent(OnClick_UseThirdSkill);
+        
     }
 
     private void OnClick_UseNormalAttack()
     {
-        DaniTechGameManager.Inst.LocalPlayer.UseNormalAttack();
+        //DaniTechGameManager.Inst.LocalPlayer.UseNormalAttack();
+
         var localPlayer = DaniTechGameManager.Inst.GetLocalPlayer(); //  DaniTechGameObjectManager.Inst.GetLocalPlayer();
         localPlayer.UseNormalAttack();
     }
@@ -44,7 +49,7 @@ public class DaniTech_MainUI : DaniTechUIBase
     {
         var localPlayer = DaniTechGameManager.Inst.GetLocalPlayer(); //  DaniTechGameObjectManager.Inst.GetLocalPlayer();
         localPlayer.UseFirstSkill();
-    }    
+    }
 
     private void OnClick_UseSecondSkill()
     {
@@ -98,4 +103,44 @@ public class DaniTech_MainUI : DaniTechUIBase
         Debug.LogWarning("게임 세이브");
     }
 
+
+    public void InitMainHud(int instanceId, Transform targetTranform)
+    {
+        _instanceId = instanceId;
+        _targetTransform = targetTranform;
+
+
+        TryBindStatChangedEvent(targetTranform.gameObject);
+    }
+
+    private void TryBindStatChangedEvent(GameObject gObj)
+    {
+        var player = gObj.GetComponent<DaniTech_2DPlayer>();
+        if (player != null)
+        {
+            player.BindOnstatChangedEvent(OnTargetEntityHpChange, OnTargetEntitySpChange);
+            return;
+        }
+        var monster = gObj.GetComponent<DaniTech_GameMonster_Dog>();
+        if (monster != null)
+        {
+            monster.BindOnstatChangedEvent(OnTargetEntityHpChange, OnTargetEntitySpChange);
+            return;
+        }
+
+
+    }
+    private void OnTargetEntityHpChange(int curHp, int maxHp)
+    {
+        Slider_Hp.value = (curHp / (float)maxHp);
+        _textMesh_Hp.text = curHp.ToString();
+
+    }
+
+    private void OnTargetEntitySpChange(int curSp, int maxSp)
+    {
+        Slider_Sp.value = (curSp / (float)maxSp);
+
+
+    }
 }

@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class DaniTech_HudSlotUI : MonoBehaviour
     [SerializeField] private GameObject Layout_BuffSlot;
     [SerializeField] private Slider Slider_Hp;
     [SerializeField] private Slider Slider_Sp;
+    [SerializeField] private TextMeshProUGUI _textMesh_Hp;
 
 
     private int _instanceId;
@@ -45,6 +47,7 @@ public class DaniTech_HudSlotUI : MonoBehaviour
     private void OnTargetEntityHpChange(int curHp, int maxHp)
     {
         Slider_Hp.value = (curHp/(float)maxHp);
+        _textMesh_Hp.text = curHp.ToString();
 
     }
 

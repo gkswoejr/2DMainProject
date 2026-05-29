@@ -24,7 +24,21 @@
     "Id": "skill_Tree_01",
     "Name": "나무",
     "Description": "커피를 볶아 마신다. 모든 상태이상이 해제된다.",
-    "PrefabPath": null,
+    "PrefabPath": "Prefab2DObject/SkillObject_Tree_01",
     "SpritePath": "2D/tree-2"
+  },
+  {
+    "Id": "skill_Sword_01",
+    "Name": "칼 공격1",
+    "Description": "칼 공격 1번째",
+    "PrefabPath": "Prefab2DObject/SkillObject_Sword_01",
+    "SpritePath": "2D/skill_Sword_01"
+  },
+  {
+    "Id": "skill_Sword_02",
+    "Name": "칼 공격2",
+    "Description": "칼 공격 2번째",
+    "PrefabPath": null,
+    "SpritePath": null
   }
 ]

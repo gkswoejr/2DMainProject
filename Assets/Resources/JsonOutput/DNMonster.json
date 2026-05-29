@@ -14,7 +14,7 @@
     "Id": "mob_dog_1",
     "Name": "도그",
     "Description": "멍머이.",
-    "BaseHp": 2000,
+    "BaseHp": 200,
     "BaseAttackDamage": 20,
     "NormalAttackMultiple": 1.2,
     "SkillAttackMultipleList": [

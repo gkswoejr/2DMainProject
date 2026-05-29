@@ -95,6 +95,21 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0d9ab9470656de4fba45c4dda2ba230
+    m_Address: Prefab2DObject/SkillObject_Sword_01
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d215891395584084faddb64de5f18554
+    m_Address: Prefab2DObject/SkillObject_Tree_01
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d650bbce2381c1644877122d1b2f1100
+    m_Address: 2D/skill_Sword_01
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d8d61a3cf509c944a9072703554e32fb
     m_Address: Sound/Voice_Pug_1_success
     m_ReadOnly: 0

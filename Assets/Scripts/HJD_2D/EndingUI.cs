@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Exit : MonoBehaviour
+public class EndingUI : DaniTechUIBase
     
 {
     [SerializeField] Button Button;

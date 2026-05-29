@@ -81,7 +81,7 @@
     "IconPath": "Icon/Icon_Item_Equip_Hat_1",
     "UseItemType": "SummonMonster",
     "UseItemParameterList": [
-      "mob_dog_1"
+      "mob_dog_1:2"
     ]
   }
 ]

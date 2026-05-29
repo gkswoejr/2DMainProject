@@ -8,6 +8,10 @@ public class DaniTechGameObjectManager : MonoBehaviour
     [SerializeField] private GameObject Prefab_Enemy;
     [SerializeField] private Transform Root_Enemy;
 
+    //생성할 스킬 프리팹
+    [SerializeField] private GameObject _prefab_Skill;
+    [SerializeField] private Transform _root_Skill;
+
     public static DaniTechGameObjectManager Inst { get; set; }
 
     // 생성된 오브젝트의 키가 됨
@@ -167,6 +171,22 @@ public class DaniTechGameObjectManager : MonoBehaviour
             var createdObj = await DaniTechResourceManager.Inst.InstantiateAsync(fieldObject.PrefabPath, Root_Enemy, true);
             createdObj.transform.position = spawnSpot.position;
             AddFieldObjectOnCreate(createdObj, fieldObjectDataId);
+        }
+    }
+
+    public async UniTaskVoid CreateSKillObject(string skillObjectDataId, Transform spawnSpot, System.Action<GameObject> onCreated = null)
+    {
+        var skillObject = DaniTechGameDataManager.Instance.GetSkill(skillObjectDataId);
+        if (skillObject != null)
+        {
+            var createdObj = await DaniTechResourceManager.Inst.InstantiateAsync(skillObject.PrefabPath, _root_Skill, true);
+            createdObj.transform.position = spawnSpot.position;
+            createdObj.transform.rotation = spawnSpot.rotation;
+
+
+
+            //AddFieldObjectOnCreate(createdObj, skillObjectDataId);
+            onCreated?.Invoke(createdObj);
         }
     }
 

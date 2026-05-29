@@ -1,8 +1,9 @@
 using System;
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 
-public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
+
+public class DaniTech_GameMonster_Trap : MonoBehaviour
 {
     [Header("몬스터 프리팹에서 미리 설정할 데이터")]
     public float SkillTime = 1f;
@@ -40,11 +41,11 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
 
     public void InitMonster(int instanceId, string dataId)
     {
-        _instanceId= instanceId;
+        _instanceId = instanceId;
         _dataId = dataId;
 
         var monsterData = DaniTechGameDataManager.Instance.GetDNMonsterData(dataId);
-        if (monsterData != null) 
+        if (monsterData != null)
         {
             _thisMonsterData = monsterData;
             _baseHp = _thisMonsterData.BaseHp;
@@ -55,7 +56,9 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
 
         DaniTechUIManager.Instance.AddHudSlot(instanceId, this.gameObject.transform);
 
-        StartCoroutine(CheckAndUseSkill());
+
+
+        //StartCoroutine(CheckAndUseSkill());
 
     }
 
@@ -67,18 +70,18 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
     }
     private int GetFinalNormalAttackDamage(int baseAttack, float normalAttackMultiple)
     {
-        return GetFinalSkillAttackDamage(baseAttack,normalAttackMultiple);
+        return GetFinalSkillAttackDamage(baseAttack, normalAttackMultiple);
     }
 
     private int GetFinalSkillAttackDamage(int baseAttack, float skillMultiple)
     {
-        return(int)(baseAttack * skillMultiple);
+        return (int)(baseAttack * skillMultiple);
     }
-  
-    
-    
 
-    
+
+
+
+
     //코루틴은 유니테스크로 호환이 가능하다
 
     IEnumerator CheckAndUseSkill()
@@ -92,7 +95,7 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
             }
             //ChangeMonsterDirection();
             UseAttackSkill();
-            
+
         }
 
     }
@@ -135,10 +138,10 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
 
 
 
-        
 
-        
-        
+
+
+
     }
 
     private void OnSkillCollision(int colliedObjectInstanceId, int damage)
@@ -188,5 +191,4 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
         _onHpChanged?.Invoke(_baseHp, _maxHp);
         // _onSpChanged?.Invoke(_playerSp);
     }
-
 }

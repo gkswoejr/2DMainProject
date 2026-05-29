@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3874154609676785482}
+  - component: {fileID: 5695936699555434781}
   m_Layer: 5
   m_Name: EndingUI
   m_TagString: Untagged
@@ -38,6 +39,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5695936699555434781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 353222225964165005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eed2dd514403348489b03bd51188e015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Exit
+  Button: {fileID: 1256304819914115724}
 --- !u!1 &5699201879619228587
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,9 +143,8 @@ GameObject:
   - component: {fileID: 6422091935590709736}
   - component: {fileID: 8630317450087298526}
   - component: {fileID: 1256304819914115724}
-  - component: {fileID: 1890662079861014377}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Button_AllImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -238,19 +251,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1890662079861014377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5855459853290774940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eed2dd514403348489b03bd51188e015, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Exit
-  Button: {fileID: 1256304819914115724}
 --- !u!1 &8116136113335561870
 GameObject:
   m_ObjectHideFlags: 0

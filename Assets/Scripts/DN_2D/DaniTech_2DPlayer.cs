@@ -25,7 +25,7 @@ public class DaniTech_2DPlayer : MonoBehaviour
     [SerializeField] private Camera _camera;
 
     [Header("스킬 관련")]
-    [SerializeField] private GameObject Prefab_SkillObject;
+    [SerializeField] private string id_SkillObject;
     [SerializeField] private Transform tranform_SkillObjectRoot;
 
     [Header("전투 관련 정보")]
@@ -61,6 +61,7 @@ public class DaniTech_2DPlayer : MonoBehaviour
 
         
         _maxHp = _playerHp;
+        
     }
 
     
@@ -70,7 +71,12 @@ public class DaniTech_2DPlayer : MonoBehaviour
     {
         // 나 스스로를 등록한다. -> 씬에 있는 그 2D 플레이어가 등록됨
         DaniTechGameObjectManager.Inst.RegisterLocalPlayer(this);
-        DaniTechUIManager.Instance.AddHudSlot(0, this.gameObject.transform);
+
+        //DaniTechUIManager.Instance.AddHudSlot(0, this.gameObject.transform);
+
+        DaniTechUIManager.Instance.AddMainHud(0, this.gameObject.transform);
+        InvokeStatChangedEvent();
+
     }
 
     void Update()
@@ -79,7 +85,7 @@ public class DaniTech_2DPlayer : MonoBehaviour
         _horizontalInput = Input.GetAxisRaw("Horizontal");
 
         // 2. 점프 입력
-        if (Input.GetButtonDown("Jump") && _isGrounded)
+        if (Input.GetButton("Jump") && _isGrounded)
         {
             Jump();
         }
@@ -233,15 +239,24 @@ public class DaniTech_2DPlayer : MonoBehaviour
 
     private void CreateProjectSkillObject()
     {
-        var gObj = Instantiate(Prefab_SkillObject,tranform_SkillObjectRoot.position, _gameObjectAttackArrow.transform.rotation);
-        if (gObj == null) return;
-
-        var skillProjectileComponent = gObj.GetComponent<HJD_SkillProjectile>();
-        if (skillProjectileComponent == null) return;
 
         var tag = this.gameObject.tag;
-        skillProjectileComponent.InitSkillObject(0, this.transform.position, _playerBaseAtk, tag, OnMonsterCollied);
+
+        // 람다식을 이용해 생성 완료 후 gObj와 "똑같은 작용"을 하도록 로직을 넘깁니다.
+        DaniTechGameObjectManager.Inst.CreateSKillObject(id_SkillObject, tranform_SkillObjectRoot, (createdObj) =>
+        {
+            if (createdObj == null) return;
+
+            // gObj에서 하던 컴포넌트 세팅 및 초기화를 그대로 수행
+            var skillProjectileComponent = createdObj.GetComponent<HJD_SkillBase>();
+            if (skillProjectileComponent == null) return;
+
+            skillProjectileComponent.InitSkillObject(0, tranform_SkillObjectRoot.position, _playerBaseAtk, tag, OnMonsterCollied);
+        }).Forget();
+
+        
     }
+
     private void OnMonsterCollied(int monsterInstanceId, int skillDamage)
     {
         // 게임 오브젝트 매니저는 모든 몬스터를 관리한다
@@ -282,6 +297,11 @@ public class DaniTech_2DPlayer : MonoBehaviour
     public void PlayerDie()
     {
         // bool _isAlive = false;
+        DaniTechGameManager.Inst.RespawnPlayer();
+        _playerHp = 0;
+        _playerHp += 100;
+        InvokeStatChangedEvent();
+
         // Destroy(this.gameObject);
         //DaniTechUIManager.Instance.RemoveHudSlot(0);
     }
