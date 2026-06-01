@@ -1,15 +1,29 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
 {
     [Header("몬스터 프리팹에서 미리 설정할 데이터")]
-    public float SkillTime = 1f;
-    public GameObject Prefab_ThisMonsterSkillObject;
+    public float _skillTime = 1f;
+    public float walkSpeed = 1f;
+    [SerializeField] private float wanderRadius = 4f;
+    [SerializeField] private Rigidbody2D _rigidBody_Monster;
+
+    private float _horizontalInput;
+    private bool _lookRight = true;
+    private bool isMoving = false;
+
     public GameObject GameObject_SkillObjectRoot;
     public GameObject SpriteRenderer_ThisMonster;
     [SerializeField] private string id_SkillObject;
+
+    [Header("움직일 타겟 포지션")]
+    private Vector3 targetPosition;
+
+    [Header("애니메이터")]
+    [SerializeField] private DaniTech_2DAnimatorController AnimatorController_Entity;
 
     [Header("데이터를 확인할 수 있도록 임시로 열기")]
     public int _instanceId; //게임 오브젝트 매니저에서 찾는 용도 Id
@@ -37,6 +51,73 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
         ResetstatChangedEvent(); //스탯변경하는 이벤트 초기화
     }
 
+    private void Update()
+    {
+
+        // 2. 점프 입력
+        /*if (Input.GetButton("Jump") && _isGrounded)
+        {
+            Jump();
+        }*/
+
+        float currentXVelocity = _rigidBody_Monster.linearVelocity.x;
+
+        // 3. 캐릭터 방향 전환 (Flip)
+        if (currentXVelocity > 0 && !_lookRight)
+        {
+            Flip();
+        }
+        else if (currentXVelocity < 0 && _lookRight)
+        {
+            Flip();
+        }
+
+        // 이동을 한다라는 판정만 우선 해봅시다
+        bool isMoving = (_horizontalInput != 0);
+        ChangeMonsterState(isMoving ? DaniTech_EntityAnimState.Walk : DaniTech_EntityAnimState.Idle);
+
+    }
+    void Move()
+    {
+        // Y축 속도는 유지하면서 X축 속도만 변경 (관성 유지)
+        _rigidBody_Monster.linearVelocity = new Vector2(_horizontalInput * walkSpeed, _rigidBody_Monster.linearVelocity.y);
+    }
+
+    void Flip()
+    {
+        _lookRight = !_lookRight;
+        Vector3 scaler = transform.localScale;
+        scaler.x *= -1;
+        transform.localScale = scaler;
+    }
+    private void ChangeMonsterState(DaniTech_EntityAnimState newState)
+    {
+        // 이런 곳에 UI나 플레이어의 별도 처리를 넣어줄 수도 있다
+
+
+        // 우선 애니메이션만 바꿔 봅시다
+        AnimatorController_Entity.SetState(newState);
+    }
+
+    IEnumerator CheckAndWalk()
+    {
+        while (_isAlive)
+        {
+            
+            Vector3 randomDirection = Random.insideUnitCircle * wanderRadius;
+            randomDirection.y = 0;
+
+
+            _rigidBody_Monster.linearVelocity = randomDirection.normalized * walkSpeed;
+            float walkTime = Random.Range(1f, 2f);
+            yield return new WaitForSeconds(walkTime);
+
+            _rigidBody_Monster.linearVelocity = Vector3.zero;
+
+            float waitTime = Random.Range(1f, 3f);
+            yield return new WaitForSeconds(waitTime);
+        }
+    }
 
     public void InitMonster(int instanceId, string dataId)
     {
@@ -56,6 +137,7 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
         DaniTechUIManager.Instance.AddHudSlot(instanceId, this.gameObject.transform);
 
         StartCoroutine(CheckAndUseSkill());
+        StartCoroutine(CheckAndWalk());
 
     }
 
@@ -74,18 +156,18 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
     {
         return(int)(baseAttack * skillMultiple);
     }
-  
-    
-    
+
 
     
+
+
     //코루틴은 유니테스크로 호환이 가능하다
 
     IEnumerator CheckAndUseSkill()
     {
         while (_isAlive)
         {
-            yield return new WaitForSeconds(SkillTime);
+            yield return new WaitForSeconds(_skillTime);
             if (_isAlive == false)
             {
                 break;
@@ -94,8 +176,9 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
             UseAttackSkill();
             
         }
-
     }
+
+    
 
     private void ChangeMonsterDirection()
     {
@@ -131,15 +214,8 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
 
             skillProjectileComponent.InitSkillObject(_instanceId, GameObject_SkillObjectRoot.transform.position, finalSkillDamage, tag, OnSkillCollision);
         }).Forget();
-
-
-
-
-        
-
-        
-        
     }
+
 
     private void OnSkillCollision(int colliedObjectInstanceId, int damage)
     {

@@ -84,7 +84,7 @@ public class HJD_SkillBase : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        CheckCollision(collision.collider);
+        //CheckCollision(collision.collider);
     }
 
     private void CheckCollision(Collider2D collision)
