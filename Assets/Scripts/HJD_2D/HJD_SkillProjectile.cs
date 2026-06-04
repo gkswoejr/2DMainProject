@@ -9,7 +9,7 @@ public class HJD_SkillProjectile : HJD_SkillBase
 
     void Update()
     {
-        transform.Translate(Vector3.up * _moveSpeed * Time.deltaTime);
+        transform.Translate(Vector3.right * _moveSpeed * Time.deltaTime);
     }
     protected override void SKillLife()
     {

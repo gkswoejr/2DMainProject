@@ -75,6 +75,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 73713a94ef670ef41bac106c6338d72b
+    m_Address: Texture2D/Image_Loading_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 90e7f9efefe56004e9478d2aa596ac0a
+    m_Address: Texture2D/Image_Loading_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 988485599ab6ecb4db508e35e6b5086a
     m_Address: Sound/Pugmia_Bgm_Housing_1
     m_ReadOnly: 0

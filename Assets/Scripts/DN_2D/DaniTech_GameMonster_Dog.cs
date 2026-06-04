@@ -10,6 +10,9 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
     public float walkSpeed = 1f;
     [SerializeField] private float wanderRadius = 4f;
     [SerializeField] private Rigidbody2D _rigidBody_Monster;
+    [SerializeField] private Collider2D _collider_MonsterDetectorRadius;
+    [SerializeField] private DaniTech_GameMonsterBase_Collider _daniTech_GameMonsterBase_Collider;
+
 
     private float _horizontalInput;
     private bool _lookRight = true;
@@ -45,10 +48,16 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
     private event Action<int, int> _onHpChanged;
     private event Action<int, int> _onSpChanged;
 
+
+    private void OnEnable()
+    {
+        BindMonsterDetectorRadius();
+    }
     private void OnDisable()
     {
         _isAlive = false;
         ResetstatChangedEvent(); //스탯변경하는 이벤트 초기화
+        ResetMonsterDetectorRadius();
     }
 
     private void Update()
@@ -99,25 +108,7 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
         AnimatorController_Entity.SetState(newState);
     }
 
-    IEnumerator CheckAndWalk()
-    {
-        while (_isAlive)
-        {
-            
-            Vector3 randomDirection = Random.insideUnitCircle * wanderRadius;
-            randomDirection.y = 0;
-
-
-            _rigidBody_Monster.linearVelocity = randomDirection.normalized * walkSpeed;
-            float walkTime = Random.Range(1f, 2f);
-            yield return new WaitForSeconds(walkTime);
-
-            _rigidBody_Monster.linearVelocity = Vector3.zero;
-
-            float waitTime = Random.Range(1f, 3f);
-            yield return new WaitForSeconds(waitTime);
-        }
-    }
+  
 
     public void InitMonster(int instanceId, string dataId)
     {
@@ -258,6 +249,50 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
         _onHpChanged = null;
         _onSpChanged = null;
     }
+
+    private void BindMonsterDetectorRadius()
+    {
+        _daniTech_GameMonsterBase_Collider.OnTriggerStayEvent += PlayerDetected;
+    }
+
+    private void ResetMonsterDetectorRadius()
+    {
+        _daniTech_GameMonsterBase_Collider.OnTriggerStayEvent -= PlayerDetected;
+    }
+
+    private void PlayerDetected(Collider2D playerCollider)
+    {
+        Vector3 direction = playerCollider.transform.position - GameObject_SkillObjectRoot.transform.position;
+
+        if (direction != Vector3.zero)
+        {
+            // 3. 해당 방향을 바라보는 회전값 생성
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            // 4. 즉시 회전시키고 싶다면:
+            GameObject_SkillObjectRoot.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+        }
+    }
+
+    IEnumerator CheckAndWalk()
+    {
+        while (_isAlive)
+        {
+
+            Vector3 randomDirection = Random.insideUnitCircle * wanderRadius;
+            randomDirection.y = 0;
+
+
+            _rigidBody_Monster.linearVelocity = randomDirection.normalized * walkSpeed;
+            float walkTime = Random.Range(1f, 2f);
+            yield return new WaitForSeconds(walkTime);
+
+            _rigidBody_Monster.linearVelocity = Vector3.zero;
+            float waitTime = Random.Range(1f, 3f);
+            yield return new WaitForSeconds(waitTime);
+        }
+    }
+
 
     private void InvokeStatChangedEvent()
     {
