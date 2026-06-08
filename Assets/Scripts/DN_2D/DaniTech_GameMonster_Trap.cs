@@ -5,6 +5,8 @@ using System.Collections;
 
 public class DaniTech_GameMonster_Trap : MonoBehaviour
 {
+
+
     [Header("몬스터 프리팹에서 미리 설정할 데이터")]
     public float SkillTime = 1f;
     public GameObject Prefab_ThisMonsterSkillObject;
@@ -31,6 +33,11 @@ public class DaniTech_GameMonster_Trap : MonoBehaviour
 
     private event Action<int, int> _onHpChanged;
     private event Action<int, int> _onSpChanged;
+
+
+    public int _damage;
+    protected int _ownerInstanceId;
+
 
     private void OnDisable()
     {
@@ -190,5 +197,27 @@ public class DaniTech_GameMonster_Trap : MonoBehaviour
     {
         _onHpChanged?.Invoke(_baseHp, _maxHp);
         // _onSpChanged?.Invoke(_playerSp);
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        CheckCollision(collision);
+    }
+
+    private void CheckCollision(Collider2D collision)
+    {
+
+        // 투사체가 충돌한 오브젝트의 Tag가 플레이어라면?
+        if (collision.CompareTag("Player"))
+        {
+            // 플레이어라면 직접 플레이어에게 투사체가 데미지를 부여해봅시다
+            var player = DaniTechGameObjectManager.Inst.GetLocalPlayer();
+            player.TakeDamage(_damage);
+
+            // 스킬은 오브젝트 매니저를 통해서 만들어지지는 않았으므로 직접 스스로 제거해봅시다
+            // 몬스터 -> 오브젝트 매니저를 통해서 제거 (UI매니저와 동일한 프로세스)
+            // 스킬은 직접 스스로 제거
+        }
     }
 }

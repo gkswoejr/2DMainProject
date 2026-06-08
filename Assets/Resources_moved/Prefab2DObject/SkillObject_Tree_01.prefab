@@ -140,7 +140,7 @@ MonoBehaviour:
   skillLifeTime: 3
   SpritePath_Skill: skill_Tree_01
   Sprite_Skill: {fileID: 1810915210935993927}
-  _moveSpeed: 15
+  _moveSpeed: 20
 --- !u!58 &1243942439299018923
 CircleCollider2D:
   m_ObjectHideFlags: 0

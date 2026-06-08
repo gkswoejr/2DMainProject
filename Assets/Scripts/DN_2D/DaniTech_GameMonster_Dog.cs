@@ -5,10 +5,19 @@ using Random = UnityEngine.Random;
 
 public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
 {
+    private enum MonsterAIState
+    {
+        NONE = 0,
+        IDLE,
+        WALK,
+        CHASE,
+        ATTACK
+    }
+    private MonsterAIState currentAIState = MonsterAIState.WALK;
+
     [Header("몬스터 프리팹에서 미리 설정할 데이터")]
     public float _skillTime = 1f;
     public float walkSpeed = 1f;
-    [SerializeField] private float wanderRadius = 4f;
     [SerializeField] private Rigidbody2D _rigidBody_Monster;
     [SerializeField] private Collider2D _collider_MonsterDetectorRadius;
     [SerializeField] private DaniTech_GameMonsterBase_Collider _daniTech_GameMonsterBase_Collider;
@@ -17,13 +26,15 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
     private float _horizontalInput;
     private bool _lookRight = true;
     private bool isMoving = false;
-
+    private Transform _monsterTargetTranform;
     public GameObject GameObject_SkillObjectRoot;
     public GameObject SpriteRenderer_ThisMonster;
     [SerializeField] private string id_SkillObject;
 
     [Header("움직일 타겟 포지션")]
     private Vector3 targetPosition;
+    private Vector3 moveDirection;
+    private float currentXVelocity;
 
     [Header("애니메이터")]
     [SerializeField] private DaniTech_2DAnimatorController AnimatorController_Entity;
@@ -51,7 +62,7 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
 
     private void OnEnable()
     {
-        BindMonsterDetectorRadius();
+
     }
     private void OnDisable()
     {
@@ -62,34 +73,40 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
 
     private void Update()
     {
+        //Vector3 moveDirection = Vector3.zero;
 
-        // 2. 점프 입력
-        /*if (Input.GetButton("Jump") && _isGrounded)
-        {
-            Jump();
-        }*/
 
-        float currentXVelocity = _rigidBody_Monster.linearVelocity.x;
+
+        currentXVelocity = _rigidBody_Monster.linearVelocity.x;
+
+
 
         // 3. 캐릭터 방향 전환 (Flip)
-        if (currentXVelocity > 0 && !_lookRight)
+        if (currentXVelocity > 0.03f && !_lookRight)
         {
             Flip();
         }
-        else if (currentXVelocity < 0 && _lookRight)
+        else if (currentXVelocity < -0.03f && _lookRight)
         {
             Flip();
         }
 
-        // 이동을 한다라는 판정만 우선 해봅시다
-        bool isMoving = (_horizontalInput != 0);
-        ChangeMonsterState(isMoving ? DaniTech_EntityAnimState.Walk : DaniTech_EntityAnimState.Idle);
+        bool isMoving = currentXVelocity > 0.01f;
+        //ChangeMonsterState(isMoving ? DaniTech_EntityAnimState.Walk : DaniTech_EntityAnimState.Idle);
+
+
+    }
+
+    void FixedUpdate()
+    {
+        Move();
 
     }
     void Move()
     {
         // Y축 속도는 유지하면서 X축 속도만 변경 (관성 유지)
-        _rigidBody_Monster.linearVelocity = new Vector2(_horizontalInput * walkSpeed, _rigidBody_Monster.linearVelocity.y);
+        _rigidBody_Monster.linearVelocity = new Vector2(moveDirection.x * walkSpeed, _rigidBody_Monster.linearVelocity.y);
+
     }
 
     void Flip()
@@ -108,15 +125,15 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
         AnimatorController_Entity.SetState(newState);
     }
 
-  
+
 
     public void InitMonster(int instanceId, string dataId)
     {
-        _instanceId= instanceId;
+        _instanceId = instanceId;
         _dataId = dataId;
 
         var monsterData = DaniTechGameDataManager.Instance.GetDNMonsterData(dataId);
-        if (monsterData != null) 
+        if (monsterData != null)
         {
             _thisMonsterData = monsterData;
             _baseHp = _thisMonsterData.BaseHp;
@@ -127,9 +144,11 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
 
         DaniTechUIManager.Instance.AddHudSlot(instanceId, this.gameObject.transform);
 
-        StartCoroutine(CheckAndUseSkill());
+        //StartCoroutine(CheckAndUseSkill());
+
         StartCoroutine(CheckAndWalk());
 
+        BindMonsterDetectorOnTrigger2D();
     }
 
 
@@ -140,16 +159,16 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
     }
     private int GetFinalNormalAttackDamage(int baseAttack, float normalAttackMultiple)
     {
-        return GetFinalSkillAttackDamage(baseAttack,normalAttackMultiple);
+        return GetFinalSkillAttackDamage(baseAttack, normalAttackMultiple);
     }
 
     private int GetFinalSkillAttackDamage(int baseAttack, float skillMultiple)
     {
-        return(int)(baseAttack * skillMultiple);
+        return (int)(baseAttack * skillMultiple);
     }
 
 
-    
+
 
 
     //코루틴은 유니테스크로 호환이 가능하다
@@ -158,18 +177,22 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
     {
         while (_isAlive)
         {
+
             yield return new WaitForSeconds(_skillTime);
             if (_isAlive == false)
             {
                 break;
             }
             //ChangeMonsterDirection();
-            UseAttackSkill();
-            
+            if (currentAIState == MonsterAIState.CHASE)
+            {
+                UseAttackSkill();
+            }
+
         }
     }
 
-    
+
 
     private void ChangeMonsterDirection()
     {
@@ -250,46 +273,114 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
         _onSpChanged = null;
     }
 
-    private void BindMonsterDetectorRadius()
+    private void BindMonsterDetectorOnTrigger2D()
     {
         _daniTech_GameMonsterBase_Collider.OnTriggerStayEvent += PlayerDetected;
+        _daniTech_GameMonsterBase_Collider.OnTriggerEnterEvent += PlayerFind;
+        _daniTech_GameMonsterBase_Collider.OnTriggerExitEvent += PlayerLost;
     }
+
+
 
     private void ResetMonsterDetectorRadius()
     {
         _daniTech_GameMonsterBase_Collider.OnTriggerStayEvent -= PlayerDetected;
+        _daniTech_GameMonsterBase_Collider.OnTriggerEnterEvent -= PlayerFind;
+        _daniTech_GameMonsterBase_Collider.OnTriggerExitEvent -= PlayerLost;
+
     }
+
+
 
     private void PlayerDetected(Collider2D playerCollider)
     {
-        Vector3 direction = playerCollider.transform.position - GameObject_SkillObjectRoot.transform.position;
+        if (currentAIState != MonsterAIState.CHASE)
+        {
+            ChangeMonsterAIStateToCHASE();
+        }
 
-        if (direction != Vector3.zero)
+        _monsterTargetTranform = playerCollider.transform;
+
+        moveDirection = (_monsterTargetTranform.position - transform.position).normalized;
+
+
+        if (moveDirection != Vector3.zero)
         {
             // 3. 해당 방향을 바라보는 회전값 생성
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
             // 4. 즉시 회전시키고 싶다면:
             GameObject_SkillObjectRoot.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
         }
     }
 
+    private void PlayerFind(Collider2D playerCollider)
+    {
+        _monsterTargetTranform = playerCollider.transform;
+        ChangeMonsterAIStateToCHASE();
+
+    }
+    private void PlayerLost(Collider2D playerCollider)
+    {
+        // 타겟 초기화 (추적 종료 및 다시 배회 모드로 전환)
+        if (_monsterTargetTranform != null && playerCollider.transform == _monsterTargetTranform)
+        {
+            _monsterTargetTranform = null;
+            ChangeMonsterAIStateToWALK();
+        }
+    }
+
     IEnumerator CheckAndWalk()
     {
+
+
         while (_isAlive)
         {
+           
 
-            Vector3 randomDirection = Random.insideUnitCircle * wanderRadius;
-            randomDirection.y = 0;
+            switch (currentAIState)
+            {
 
+                case MonsterAIState.CHASE:
 
-            _rigidBody_Monster.linearVelocity = randomDirection.normalized * walkSpeed;
-            float walkTime = Random.Range(1f, 2f);
-            yield return new WaitForSeconds(walkTime);
+                    UseAttackSkill();
+                    yield return new WaitForSeconds(_skillTime);
+                    break;
 
-            _rigidBody_Monster.linearVelocity = Vector3.zero;
-            float waitTime = Random.Range(1f, 3f);
-            yield return new WaitForSeconds(waitTime);
+                case MonsterAIState.WALK:
+
+                    ChangeMonsterAIStateToIDLE();
+
+                    float dir = Random.Range(0, 2) == 0 ? -1f : 1f;
+                    moveDirection = new Vector3(dir, 0, 0);
+                    moveDirection.Normalize();
+
+                    float walkTime = Random.Range(1f, 2f);
+                    yield return new WaitForSeconds(walkTime);
+
+                    // 걷는 동안 플레이어가 감지되어 CHASE 등으로 바뀌었다면 상태 전환을 취소하고 루프 처음으로
+                    if (currentAIState != MonsterAIState.WALK) continue;
+
+                    break;
+
+                case MonsterAIState.IDLE:
+
+                    ChangeMonsterAIStateToWALK();
+
+                    moveDirection = Vector3.zero;
+
+                    float waitTime = Random.Range(1f, 2f);
+                    yield return new WaitForSeconds(waitTime);
+
+                    // 쉬는 동안 플레이어가 감지되어 상태가 바뀌었다면 루프 처음으로
+                    if (currentAIState != MonsterAIState.IDLE) continue;
+
+                    break;
+                default:
+                    yield return null;
+                    break;
+            }
+            yield return null;
         }
     }
 
@@ -300,4 +391,30 @@ public class DaniTech_GameMonster_Dog : DaniTech_GameMonsterBase
         // _onSpChanged?.Invoke(_playerSp);
     }
 
+    private void ChangeMonsterAIStateToIDLE()
+    {
+        currentAIState = MonsterAIState.IDLE;
+        Debug.Log(MonsterAIState.IDLE);
+        moveDirectionToZero();
+    }
+    private void ChangeMonsterAIStateToWALK()
+    {
+        currentAIState = MonsterAIState.WALK;
+        Debug.Log(MonsterAIState.WALK);
+
+    }
+    private void ChangeMonsterAIStateToCHASE()
+    {
+        currentAIState = MonsterAIState.CHASE;
+        Debug.Log(MonsterAIState.CHASE);
+
+    }
+
+    private void moveDirectionToZero()
+    {
+        if (currentAIState == MonsterAIState.IDLE)
+        {
+            moveDirection = Vector3.zero;
+        }
+    }
 }

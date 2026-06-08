@@ -38,7 +38,14 @@
     "Id": "skill_Sword_02",
     "Name": "칼 공격2",
     "Description": "칼 공격 2번째",
-    "PrefabPath": null,
-    "SpritePath": null
+    "PrefabPath": "Prefab2DObject/SkillObject_Sword_02",
+    "SpritePath": "2D/skill_Sword_02"
+  },
+  {
+    "Id": "skill_Arrow_01",
+    "Name": "화살공격1",
+    "Description": "화살공격",
+    "PrefabPath": "Prefab2DObject/SkillObject_Arrow_01",
+    "SpritePath": "2D/skill_Arrow_01"
   }
 ]

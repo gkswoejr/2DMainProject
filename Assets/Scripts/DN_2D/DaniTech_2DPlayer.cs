@@ -25,7 +25,8 @@ public class DaniTech_2DPlayer : MonoBehaviour
     [SerializeField] private Camera _camera;
 
     [Header("스킬 관련")]
-    [SerializeField] private string id_SkillObject;
+    [SerializeField] private string id_SkillObject_Normal;
+    [SerializeField] private string id_SkillObject_First;
     [SerializeField] private Transform tranform_SkillObjectRoot;
 
     [Header("전투 관련 정보")]
@@ -42,7 +43,7 @@ public class DaniTech_2DPlayer : MonoBehaviour
     private bool _isGrounded;
     private float _horizontalInput;
     private bool _lookRight = true;
-
+    private Vector3 mousePos;
     private bool _isSkillUsing;
 
     // 추후에는 이런 데이터가 저장될 수 있도록 UI에 있는 것보다 한곳으로 모여지는게 좋다
@@ -106,9 +107,40 @@ public class DaniTech_2DPlayer : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+           
             UseNormalAttack();
+
+            Vector3 lookDirection = _gameObjectAttackArrow.transform.up; // 화살표의 앞방향이 어떤 축인지에 따라 바뀔 수 있음
+            if (lookDirection.x < 0 && _lookRight)
+            {
+                Flip();
+            }
+
+            if (lookDirection.x > 0 && !_lookRight)
+            {
+                Flip();
+            }
+
         }
 
+        if (Input.GetMouseButtonDown(1))
+        {
+            Vector3 lookDirection = _gameObjectAttackArrow.transform.up; // 화살표의 앞방향이 어떤 축인지에 따라 바뀔 수 있음
+            if (lookDirection.x < 0 && _lookRight)
+            {
+                Flip();
+            }
+
+            if (lookDirection.x > 0 && !_lookRight)
+            {
+                Flip();
+            }
+            UseFirstSkill();
+
+            
+           
+        }
+        
         FellowMouse();
     }
 
@@ -218,14 +250,19 @@ public class DaniTech_2DPlayer : MonoBehaviour
         if (CheckSkillUseble(isShowMsg:false)==false) { return; }
         ChangePlayerState(DaniTech_EntityAnimState.Atk);
 
-        CreateProjectSkillObject();
+        CreateProjectSkillObject(id_SkillObject_Normal);
 
         StartCoroutine(CoStartNormalAttack());
     }
 
     public void UseFirstSkill()
     {
+        if (CheckSkillUseble(isShowMsg: false) == false) { return; }
+        ChangePlayerState(DaniTech_EntityAnimState.Atk);
 
+        CreateProjectSkillObject(id_SkillObject_First);
+
+        StartCoroutine(CoStartFirstSkill());
     }
     public void UseSecondSkill()
     {
@@ -233,11 +270,11 @@ public class DaniTech_2DPlayer : MonoBehaviour
     }
     public void UseThirdSkill()
     {
-        CreateProjectSkillObject();
+        CreateProjectSkillObject(id_SkillObject_Normal);
     }
    
 
-    private void CreateProjectSkillObject()
+    private void CreateProjectSkillObject(string id_SkillObject)
     {
 
         var tag = this.gameObject.tag;
@@ -280,6 +317,13 @@ public class DaniTech_2DPlayer : MonoBehaviour
 
     }
 
+    IEnumerator CoStartFirstSkill()
+    {
+        yield return new WaitForSeconds(1.0f);
+        //Prefab_SkillObject.gameObject.SetActive(false);
+
+    }
+
 
     public void TakeDamage(int damage)
     {
@@ -299,7 +343,7 @@ public class DaniTech_2DPlayer : MonoBehaviour
         // bool _isAlive = false;
         DaniTechGameManager.Inst.RespawnPlayer();
         _playerHp = 0;
-        _playerHp += 100;
+        _playerHp += _maxHp;
         InvokeStatChangedEvent();
 
         // Destroy(this.gameObject);

@@ -46,7 +46,7 @@ public class HJD_SkillBase : MonoBehaviour
 
         _onSkillCollision = onSkillCollision;
         // 소환자의 Tag정보를 기입한다
-        this.gameObject.tag = parentTag;
+        //this.gameObject.tag = parentTag;
     }
 
 
@@ -131,7 +131,7 @@ public class HJD_SkillBase : MonoBehaviour
 
     IEnumerator ExecuteAfterTime(float time)
     {
-        Debug.Log("3초 대기를 시작합니다.");
+        //Debug.Log("3초 대기를 시작합니다.");
 
         // 지정한 초(time)만큼 유니티가 대기합니다.
         yield return new WaitForSeconds(time);

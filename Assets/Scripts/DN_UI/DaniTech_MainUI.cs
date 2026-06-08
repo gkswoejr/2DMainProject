@@ -5,11 +5,7 @@ using UnityEngine.UI;
 
 public class DaniTech_MainUI : DaniTechUIBase
 {
-    [SerializeField] private DaniTechUIButton Btn_MyProfile;
-    [SerializeField] private DaniTechUIButton Btn_StartBattle;
-    [SerializeField] private DaniTechUIButton Btn_MonsterSpawn;
     [SerializeField] private DaniTechUIButton Btn_OpenInventory;
-    [SerializeField] private DaniTechUIButton Btn_SaveGame;
     [SerializeField] private DaniTechUIButton Btn_GameBook;
 
     [Header("스킬 버튼")]
@@ -26,13 +22,13 @@ public class DaniTech_MainUI : DaniTechUIBase
 
     private void OnEnable()
     {
-        Btn_MyProfile.BindOnClickButtonEvent(OnClick_OpenMyProfile);
-        Btn_StartBattle.BindOnClickButtonEvent(OnClick_StartBattle);
-        Btn_MonsterSpawn.BindOnClickButtonEvent(OnClicK_MonsterSpawn);
-        Btn_OpenInventory.BindOnClickButtonEvent(OnClick_OpenInventory);
-        Btn_SaveGame.BindOnClickButtonEvent(OnClick_SaveGame);
-        Btn_GameBook.BindOnClickButtonEvent(OnClick_OpenGameBook);
+        //Btn_StartBattle.BindOnClickButtonEvent(OnClick_StartBattle);
+        //Btn_MonsterSpawn.BindOnClickButtonEvent(OnClicK_MonsterSpawn);
+        //Btn_SaveGame.BindOnClickButtonEvent(OnClick_SaveGame);
+        //Btn_MyProfile.BindOnClickButtonEvent(OnClick_OpenMyProfile);
 
+        Btn_OpenInventory.BindOnClickButtonEvent(OnClick_OpenInventory);
+        Btn_GameBook.BindOnClickButtonEvent(OnClick_OpenGameBook);
         Btn_UseNormalAttack.BindOnClickButtonEvent(OnClick_UseNormalAttack);
         
     }
